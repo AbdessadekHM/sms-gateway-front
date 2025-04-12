@@ -1,0 +1,176 @@
+<div class="min-h-screen flex items-center justify-center bg-base-100 py-8">
+  <div class="w-[64rem] p-8 bg-white rounded-lg shadow-xl">
+    <h2 class="text-3xl font-semibold text-center mb-8">Create Account</h2>
+    
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
+      <div class="grid grid-cols-2 gap-8">
+        <!-- Left Column -->
+        <div class="space-y-5">
+          <!-- Name fields row -->
+          <div class="grid grid-cols-2 gap-4">
+            <!-- First Name -->
+            <div class="space-y-2">
+              <label class="text-sm font-medium text-gray-700 block">
+                First Name
+              </label>
+              <input 
+                type="text" 
+                formControlName="firstName"
+                placeholder="Enter your first name"
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-base outline-none placeholder:text-gray-400/60"
+              />
+              <span *ngIf="firstName?.touched && firstName?.errors?.['required']" class="text-xs text-error">
+                First name is required
+              </span>
+            </div>
+
+            <!-- Last Name -->
+            <div class="space-y-2">
+              <label class="text-sm font-medium text-gray-700 block">
+                Last Name
+              </label>
+              <input 
+                type="text" 
+                formControlName="lastName"
+                placeholder="Enter your last name"
+                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-base outline-none placeholder:text-gray-400/60"
+              />
+              <span *ngIf="lastName?.touched && lastName?.errors?.['required']" class="text-xs text-error">
+                Last name is required
+              </span>
+            </div>
+          </div>
+
+          <!-- Company Name -->
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700 block">
+              Company Name
+            </label>
+            <input 
+              type="text" 
+              formControlName="companyName"
+              placeholder="Enter your company name"
+              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-base outline-none placeholder:text-gray-400/60"
+            />
+            <span *ngIf="companyName?.touched && companyName?.errors?.['required']" class="text-xs text-error">
+              Company name is required
+            </span>
+          </div>
+
+          <!-- Phone Number -->
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700 block">
+              Phone Number
+            </label>
+            <input 
+              type="tel" 
+              formControlName="phone"
+              placeholder="Enter your phone number"
+              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-base outline-none placeholder:text-gray-400/60"
+            />
+            <span *ngIf="phone?.touched && phone?.errors?.['required']" class="text-xs text-error">
+              Phone number is required
+            </span>
+            <span *ngIf="phone?.touched && phone?.errors?.['pattern']" class="text-xs text-error">
+              Please enter a valid phone number
+            </span>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="space-y-5">
+          <!-- Username -->
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700 block">
+              Username
+            </label>
+            <input 
+              type="text" 
+              formControlName="username"
+              placeholder="Choose a username"
+              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-base outline-none placeholder:text-gray-400/60"
+            />
+            <span *ngIf="username?.touched && username?.errors?.['required']" class="text-xs text-error">
+              Username is required
+            </span>
+          </div>
+
+          <!-- Email -->
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700 block">
+              Email
+            </label>
+            <input 
+              type="email" 
+              formControlName="email"
+              placeholder="Enter your email"
+              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-base outline-none placeholder:text-gray-400/60"
+            />
+            <span *ngIf="email?.touched && email?.errors?.['required']" class="text-xs text-error">
+              Email is required
+            </span>
+            <span *ngIf="email?.touched && email?.errors?.['email']" class="text-xs text-error">
+              Please enter a valid email
+            </span>
+          </div>
+
+          <!-- Password -->
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700 block">
+              Password
+            </label>
+            <input 
+              type="password" 
+              formControlName="password"
+              placeholder="Create a password"
+              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-base outline-none placeholder:text-gray-400/60"
+            />
+            <span *ngIf="password?.touched && password?.errors?.['required']" class="text-xs text-error">
+              Password is required
+            </span>
+            <span *ngIf="password?.touched && password?.errors?.['minlength']" class="text-xs text-error">
+              Password must be at least 8 characters
+            </span>
+          </div>
+
+          <!-- Verify Password -->
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700 block">
+              Verify Password
+            </label>
+            <input 
+              type="password" 
+              formControlName="verifyPassword"
+              placeholder="Verify your password"
+              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-base outline-none placeholder:text-gray-400/60"
+            />
+            <span *ngIf="verifyPassword?.touched && verifyPassword?.errors?.['required']" class="text-xs text-error">
+              Please verify your password
+            </span>
+            <span *ngIf="registerForm.errors?.['mismatch'] && verifyPassword?.touched" class="text-xs text-error">
+              Passwords do not match
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between pt-6">
+        <!-- Already have account link -->
+        <div class="text-sm text-gray-600">
+          Already have an account? 
+          <a routerLink="/login" class="text-primary hover:text-primary-focus transition-colors font-medium">Sign in</a>
+        </div>
+
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          class="px-6 py-3 text-sm font-medium text-white bg-primary hover:bg-primary-focus rounded-lg transition-colors min-w-[160px]"
+          [disabled]="registerForm.invalid || isLoading"
+        >
+          <span *ngIf="!isLoading">Create Account</span>
+          <span *ngIf="isLoading" class="loading loading-spinner loading-sm"></span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
