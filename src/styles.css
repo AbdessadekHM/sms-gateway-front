@@ -1,5 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
-@plugin "daisyui";
 
-
+@theme {
+  --color-primary: rgb(76 175 80);
+  --color-primary-light: rgb(129 199 132);
+  --color-primary-dark: rgb(56 142 60);
+  --color-accent: rgb(102 187 106);
+  --color-success: rgb(67 160 71);
+  --color-warning: rgb(255 160 0);
+  --color-error: rgb(211 47 47);
+  --color-background: rgb(255 255 255);
+  --color-surface: rgb(245 245 245);
+  --color-text: rgb(45 55 72);
+  --color-text-light: rgb(113 128 150);
+  
+  --font-primary: 'Inter', sans-serif;
+  --font-heading: 'Plus Jakarta Sans', sans-serif;
+  
+  --max-width-container: 80rem;
+  --padding-container: 1rem;
+  --padding-container-sm: 1.5rem;
+  --padding-container-lg: 2rem;
+}
