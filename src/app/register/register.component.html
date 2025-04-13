@@ -6,41 +6,39 @@
       <div class="grid grid-cols-2 gap-8">
         <!-- Left Column -->
         <div class="space-y-5">
-          <!-- Name fields row -->
-          <div class="grid grid-cols-2 gap-4">
-            <!-- First Name -->
-            <div class="space-y-2">
-              <label class="text-sm font-medium text-gray-700 block">
-                First Name
-              </label>
-              <input 
-                type="text" 
-                formControlName="firstName"
-                placeholder="Enter your first name"
-                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-base outline-none placeholder:text-gray-400/60"
+          
+
+          <!-- FirstName -->
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700 block">
+              First Name
+            </label>
+            <input 
+              type="text" 
+              formControlName="firstName"
+              placeholder="Enter your first name"
+              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-base outline-none placeholder:text-gray-400/60"
               />
               <span *ngIf="firstName?.touched && firstName?.errors?.['required']" class="text-xs text-error">
                 First name is required
               </span>
             </div>
 
-            <!-- Last Name -->
-            <div class="space-y-2">
-              <label class="text-sm font-medium text-gray-700 block">
-                Last Name
-              </label>
-              <input 
-                type="text" 
-                formControlName="lastName"
-                placeholder="Enter your last name"
-                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-base outline-none placeholder:text-gray-400/60"
-              />
-              <span *ngIf="lastName?.touched && lastName?.errors?.['required']" class="text-xs text-error">
-                Last name is required
-              </span>
-            </div>
+          <!-- Last name -->
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700 block">
+              lastName
+            </label>
+            <input 
+              type="text" 
+              formControlName="lastName"
+              placeholder="Enter your last name"
+              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-base outline-none placeholder:text-gray-400/60"
+            />
+            <span *ngIf="lastName?.touched && lastName?.errors?.['required']" class="text-xs text-error">
+              Last name is required
+            </span>
           </div>
-
           <!-- Company Name -->
           <div class="space-y-2">
             <label class="text-sm font-medium text-gray-700 block">
