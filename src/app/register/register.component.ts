@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +17,8 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {}
 
   ngOnInit() {
@@ -43,11 +45,16 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.valid) {
       this.isLoading = true;
       // Simulate API call
-      setTimeout(() => {
-        console.log('Form submitted:', this.registerForm.value);
+      // TODO: Replace with actual API call
+      this.http.post('http://localhost:8000/api/register', this.registerForm.value).subscribe((response) => {
+        console.log('Registration successful:', response);
         this.isLoading = false;
         this.router.navigate(['/login']);
-      }, 1500);
+      }, (error) => {
+        console.error('Registration failed:', error);
+        this.isLoading = false;
+      });
+      
     } else {
       this.markFormGroupTouched(this.registerForm);
     }
