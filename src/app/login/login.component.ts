@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,8 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -28,11 +30,16 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.isLoading = true;
       // Simulate API call
-      setTimeout(() => {
-        console.log('Form submitted:', this.loginForm.value);
+      // TODO: Replace with actual API call
+      this.http.post('http://localhost:8000/api/login', this.loginForm.value).subscribe((response) => {
+        console.log('Login successful:', response);
         this.isLoading = false;
         this.router.navigate(['/home']);
-      }, 1500);
+      }, (error) => {
+        console.error('Login failed:', error);
+        this.isLoading = false;
+      })
+      
     }
   }
 
