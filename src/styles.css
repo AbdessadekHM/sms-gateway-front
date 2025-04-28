@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "daisyui";
 
 @theme {
@@ -15,10 +15,10 @@
   --color-surface: rgb(245 245 245);
   --color-text: rgb(45 55 72);
   --color-text-light: rgb(113 128 150);
-  
+
   --font-primary: 'Inter', sans-serif;
   --font-heading: 'Plus Jakarta Sans', sans-serif;
-  
+
   --max-width-container: 80rem;
   --padding-container: 1rem;
   --padding-container-sm: 1.5rem;
