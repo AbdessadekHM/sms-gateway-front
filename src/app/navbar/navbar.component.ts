@@ -1,7 +1,7 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {CommonModule, NgIf} from '@angular/common';
-import {AuthService} from '../services/auth.service';
-import {KeycloakProfile} from 'keycloak-js';
+import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule, NgIf } from '@angular/common';
+import { AuthService } from '../services/auth.service';
+import { KeycloakProfile } from 'keycloak-js';
 
 @Component({
   selector: 'app-navbar',
@@ -27,7 +27,6 @@ export class NavbarComponent implements OnInit {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 
-
   async onLogin(): Promise<void> {
     try {
       await this.authService.login();
@@ -46,11 +45,11 @@ export class NavbarComponent implements OnInit {
     }
   }
 
- async onRegister(): Promise<void> {
-     try {
-       await this.authService.register();
-     } catch (error) {
-       console.error('Registration failed:', error);
-     }
-   }
+  async onRegister(): Promise<void> {
+    try {
+      await this.authService.register();
+    } catch (error) {
+      console.error('Registration failed:', error);
+    }
+  }
 }

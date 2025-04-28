@@ -1,8 +1,14 @@
 import { AuthGuardData, createAuthGuard } from 'keycloak-angular';
-import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivateFn,
+  Router,
+  RouterStateSnapshot,
+  UrlTree,
+} from '@angular/router';
 import { inject } from '@angular/core';
 import Keycloak from 'keycloak-js';
-import {state} from '@angular/animations';
+import { state } from '@angular/animations';
 
 /**
  * The logic below is a simple example, please make it more robust when implementing in your application.
@@ -15,7 +21,7 @@ const isAccessAllowed = async (
   __: RouterStateSnapshot,
   authData: AuthGuardData
 ): Promise<boolean | UrlTree> => {
-  console.log(authData)
+  console.log(authData);
   const { authenticated, grantedRoles } = authData;
 
   const keycloak = inject(Keycloak);
@@ -23,10 +29,9 @@ const isAccessAllowed = async (
   if (!authenticated) {
     await keycloak.login({
       // redirect to the same page before login
-      redirectUri: window.location.origin + "/" + route.url.join('/')
-    })
+      redirectUri: window.location.origin + '/' + route.url.join('/'),
+    });
   }
-
 
   const requiredRole = route.data['role'];
   if (!requiredRole) {
@@ -34,7 +39,9 @@ const isAccessAllowed = async (
   }
 
   const hasRequiredRole = (role: string): boolean =>
-    Object.values(grantedRoles.realmRoles).some((roles) => roles.includes(role));
+    Object.values(grantedRoles.realmRoles).some((roles) =>
+      roles.includes(role)
+    );
 
   if (authenticated && hasRequiredRole(requiredRole)) {
     return true;
@@ -44,4 +51,5 @@ const isAccessAllowed = async (
   return router.parseUrl('/forbidden');
 };
 
-export const canActivateAuthRole = createAuthGuard<CanActivateFn>(isAccessAllowed);
+export const canActivateAuthRole =
+  createAuthGuard<CanActivateFn>(isAccessAllowed);

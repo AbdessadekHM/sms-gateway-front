@@ -1,12 +1,11 @@
-import {inject, Injectable} from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import Keycloak from 'keycloak-js';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-
   private keycloak = inject(Keycloak);
   private router = inject(Router);
   private authenticated = false;
@@ -15,13 +14,13 @@ export class AuthService {
     // log the current url
     console.log('Current URL:', window.location.href);
     await this.keycloak.login({
-        redirectUri: window.location.origin
+      redirectUri: window.location.origin,
     });
   }
 
   public async logout() {
     await this.keycloak.logout({
-      redirectUri: window.location.origin
+      redirectUri: window.location.origin,
     });
   }
 
@@ -35,8 +34,7 @@ export class AuthService {
 
   public async register() {
     await this.keycloak.register({
-      redirectUri: window.location.href
-    })
+      redirectUri: window.location.href,
+    });
   }
-
 }

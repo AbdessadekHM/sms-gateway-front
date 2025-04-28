@@ -4,43 +4,57 @@
       <!-- Logo -->
       <div class="flex-shrink-0">
         <a href="/" class="flex items-center">
-          <img src="/images/sms-high-resolution-logo.png" alt="SMS Gateway" class="h-9 w-auto">
+          <img
+            src="/images/sms-high-resolution-logo.png"
+            alt="SMS Gateway"
+            class="h-9 w-auto"
+          />
         </a>
       </div>
 
       <!-- Navigation Links and Auth Buttons -->
       <div class="hidden md:flex items-center space-x-10">
         <!-- Nav Links -->
-        <a href="/" class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200">
+        <a
+          href="/"
+          class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200"
+        >
           Home
         </a>
-        <a href="#about"
-           class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200">
+        <a
+          href="#about"
+          class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200"
+        >
           About Us
         </a>
-        <a href="#contact"
-           class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200">
+        <a
+          href="#contact"
+          class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200"
+        >
           Contact Us
         </a>
 
         <!-- Auth Links -->
         <div class="flex items-center space-x-6">
-
           <a
             *ngIf="authService.isAuthenticated()"
             (click)="onLogout()"
-            class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200">
+            class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200"
+          >
             Logout
           </a>
           <div *ngIf="!authService.isAuthenticated()">
             <a
               *ngIf="!authService.isAuthenticated()"
               (click)="onLogin()"
-              class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200">
+              class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200"
+            >
               Login
             </a>
-            <a href="/register"
-               class="bg-[var(--color-primary)] text-white px-8 py-2.5 rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors duration-200 font-medium">
+            <a
+              href="/register"
+              class="bg-[var(--color-primary)] text-white px-8 py-2.5 rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors duration-200 font-medium"
+            >
               Register Now →
             </a>
           </div>
@@ -49,10 +63,23 @@
 
       <!-- Mobile menu button -->
       <div class="md:hidden">
-        <button type="button" (click)="toggleMobileMenu()"
-                class="text-[var(--color-text)] hover:text-[var(--color-primary)]">
-          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        <button
+          type="button"
+          (click)="toggleMobileMenu()"
+          class="text-[var(--color-text)] hover:text-[var(--color-primary)]"
+        >
+          <svg
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
           </svg>
         </button>
       </div>
@@ -62,24 +89,39 @@
   <!-- Mobile menu -->
   <div class="md:hidden" [class.hidden]="!isMobileMenuOpen">
     <div class="px-6 pt-2 pb-3 space-y-1">
-      <a href="/" class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)]">Home</a>
-      <a href="#about" class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)]">About Us</a>
-      <a href="#contact" class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)]">Contact
-        Us</a>
+      <a
+        href="/"
+        class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)]"
+        >Home</a
+      >
+      <a
+        href="#about"
+        class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)]"
+        >About Us</a
+      >
+      <a
+        href="#contact"
+        class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)]"
+        >Contact Us</a
+      >
       <div *ngIf="!authService.isAuthenticated()">
         <a
           (click)="onLogin()"
-          class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)] cursor-pointer">Login</a>
+          class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)] cursor-pointer"
+          >Login</a
+        >
         <a
           (click)="onRegister()"
-           class="block px-3 py-2.5 bg-[var(--color-primary)] text-white text-center rounded-lg hover:bg-[var(--color-primary-dark)]">Register
-          Now →</a>
+          class="block px-3 py-2.5 bg-[var(--color-primary)] text-white text-center rounded-lg hover:bg-[var(--color-primary-dark)]"
+          >Register Now →</a
+        >
       </div>
       <a
         *ngIf="authService.isAuthenticated()"
         (click)="onLogout()"
-        class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)] cursor-pointer">Logout</a>
+        class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)] cursor-pointer"
+        >Logout</a
+      >
     </div>
   </div>
 </nav>
-
