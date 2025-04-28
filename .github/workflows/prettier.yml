@@ -19,6 +19,7 @@ jobs:
           node-version: 18
           cache: 'pnpm'
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --save-dev --save-exact prettier
+
       - name: Check formatting with Prettier
         run: pnpm prettier:write
