@@ -1,7 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
-import { AuthService } from '../../../services/auth.service';
+
 import { KeycloakProfile } from 'keycloak-js';
+import { AuthService } from '../../../core/services/auth.service';
 
 
 @Component({
