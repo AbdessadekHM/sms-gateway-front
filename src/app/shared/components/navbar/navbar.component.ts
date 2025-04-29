@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import { KeycloakProfile } from 'keycloak-js';
 import { AuthService } from '../../../core/services/auth.service';
-
+import { Observable } from 'rxjs';
+import Keycloak from 'keycloak-js';
 
 @Component({
   selector: 'app-navbar',
@@ -12,13 +12,13 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class NavbarComponent implements OnInit {
   isMobileMenuOpen = false;
+  profile: Observable<Keycloak.KeycloakProfile> | undefined;
   protected authService = inject(AuthService);
-  profile: KeycloakProfile | null = null;
 
   async ngOnInit(): Promise<void> {
     try {
       if (this.authService.isAuthenticated()) {
-        this.profile = await this.authService.getProfile();
+        this.profile = this.authService.getUserInfo();
       }
     } catch (error) {
       console.error('Error initializing profile:', error);
@@ -32,7 +32,7 @@ export class NavbarComponent implements OnInit {
   async onLogin(): Promise<void> {
     try {
       await this.authService.login();
-      this.profile = await this.authService.getProfile();
+      this.profile = this.authService.getUserInfo();
     } catch (error) {
       console.error('Login failed:', error);
     }
@@ -41,7 +41,7 @@ export class NavbarComponent implements OnInit {
   async onLogout(): Promise<void> {
     try {
       await this.authService.logout();
-      this.profile = null;
+      this.profile = undefined;
     } catch (error) {
       console.error('Logout failed:', error);
     }

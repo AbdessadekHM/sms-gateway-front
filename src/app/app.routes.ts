@@ -8,5 +8,6 @@ export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'receivers', loadChildren: () => import('./feature/receivers/receivers.module').then(m => m.ReceiversModule) },
   { path: '**', redirectTo: '' },
 ];

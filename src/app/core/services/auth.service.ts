@@ -1,40 +1,51 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import Keycloak from 'keycloak-js';
-import { Router } from '@angular/router';
+import {from, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private keycloak = inject(Keycloak);
-  private router = inject(Router);
-  private authenticated = false;
+  constructor(private keycloak: Keycloak) {}
 
-  public async login() {
-    // log the current url
-    console.log('Current URL:', window.location.href);
-    await this.keycloak.login({
-      redirectUri: window.location.origin,
-    });
+  async login() {
+    await this.keycloak.login({ redirectUri: window.location.origin });
   }
 
-  public async logout() {
-    await this.keycloak.logout({
-      redirectUri: window.location.origin,
-    });
+  async logout() {
+    await this.keycloak.logout({ redirectUri: window.location.origin });
   }
 
-  public isAuthenticated(): boolean {
-    return !!this.keycloak.authenticated;
-  }
-
-  public async getProfile(): Promise<Keycloak.KeycloakProfile> {
-    return this.keycloak.loadUserProfile();
-  }
-
-  public async register() {
+  async register() {
     await this.keycloak.register({
       redirectUri: window.location.href,
     });
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.keycloak.authenticated;
+  }
+
+getCurrentUser(): Observable<Keycloak.KeycloakProfile> {
+    return from(this.keycloak.loadUserProfile());
+  }
+
+  getUserInfo(): Observable<Keycloak.KeycloakProfile> {
+    return from(this.keycloak.loadUserProfile());
+  }
+  hasRole(role: string): boolean {
+    return <boolean>(
+      (this.keycloak.tokenParsed &&
+        Array.isArray(this.keycloak.tokenParsed.realm_access?.roles) &&
+        this.keycloak.tokenParsed.realm_access.roles.includes(role))
+    );
+  }
+
+  getUserId(): number | null {
+    if (this.keycloak.tokenParsed && this.keycloak.tokenParsed.sub) {
+      const id = parseInt(this.keycloak.tokenParsed.sub, 10);
+      return isNaN(id) ? null : id;
+    }
+    return null;
   }
 }
