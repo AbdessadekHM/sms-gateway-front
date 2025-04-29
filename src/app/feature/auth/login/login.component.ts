@@ -5,10 +5,9 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
-  templateUrl: './login.component.html'
+    selector: 'app-login',
+    imports: [CommonModule, FormsModule, ReactiveFormsModule],
+    templateUrl: './login.component.html'
 })
 export class LoginComponent {
   loginForm: FormGroup;

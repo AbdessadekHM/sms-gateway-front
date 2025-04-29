@@ -6,10 +6,9 @@ import { ContactComponent } from '../../../shared/components/contact/contact.com
 
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [CommonModule, HeroComponent, AboutComponent, ContactComponent],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+    selector: 'app-home',
+    imports: [CommonModule, HeroComponent, AboutComponent, ContactComponent],
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.css'
 })
 export class HomeComponent {}
