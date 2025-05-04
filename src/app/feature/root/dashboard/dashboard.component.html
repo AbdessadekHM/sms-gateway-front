@@ -37,7 +37,7 @@
             class="relative pb-3 text-lg font-semibold transition-colors duration-200"
             [ngClass]="{'text-primary border-b-4 border-primary': activeTab === 'users', 'text-gray-500 hover:text-primary': activeTab !== 'users'}"
             (click)="activeTab = 'users'"
-          >Users</button>
+          >Recievers</button>
           <button
             class="relative pb-3 text-lg font-semibold transition-colors duration-200"
             [ngClass]="{'text-primary border-b-4 border-primary': activeTab === 'groups', 'text-gray-500 hover:text-primary': activeTab !== 'groups'}"
@@ -60,17 +60,17 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let user of mockUsers; let i = index" class="border-b last:border-none hover:bg-gray-50 transition-colors duration-150">
-              <td class="py-4 px-2">{{ user.fullName }}</td>
+            <tr *ngFor="let user of renderedUsers; let i = index" class="border-b last:border-none hover:bg-gray-50 transition-colors duration-150">
+              <td class="py-4 px-2">{{ user.name }}</td>
               <td class="py-4 px-2">{{ user.phone }}</td>
-              <td class="py-4 px-2">{{ user.createdAt }}</td>
+              <td class="py-4 px-2">{{ user.createdat }}</td>
               <td class="py-4 px-2 space-x-2">
                 <button
-                  class="bg-secondary hover:bg-secondary/90 text-white px-4 py-1.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
+                  class="bg-accent hover:bg-primary-dark text-white px-4 py-1.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
                   (click)="sendSMS(user)"
                 >SMS</button>
                 <button
-                  class="bg-secondary hover:bg-secondary/90 text-white px-4 py-1.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
+                  class="bg-accent hover:bg-primary-dark text-white px-4 py-1.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
                   (click)="sendWhatsApp(user)"
                 >WhatsApp</button>
               </td>
@@ -81,9 +81,10 @@
       <div class="flex justify-center mt-6">
         <nav class="flex space-x-2">
           <button
-            *ngFor="let page of [1, 2]"
+            *ngFor="let page of indexes"
             class="px-4 py-2 text-sm font-medium rounded-lg hover:bg-primary-light hover:text-primary transition-all duration-200"
-            [ngClass]="{'bg-primary-light text-primary': page === 1, 'text-gray-600': page !== 1}"
+            (click)="onIndexChange(page)"
+            [ngClass]="{'bg-primary-light text-primary': page === index, 'text-gray-600': page !== index}"
           >{{ page }}</button>
         </nav>
       </div>

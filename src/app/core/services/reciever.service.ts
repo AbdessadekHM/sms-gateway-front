@@ -6,7 +6,7 @@ import { Reciever } from '../../shared/models/Reciever';
 })
 export class RecieverService {
 
-  public users: Reciever[] = [
+  private users: Reciever[] = [
     { name: "Alice Johnson", phone: "+15551234567", createdat: "2025-01-01T10:00:00Z" },
     { name: "Bob Smith", phone: "+15557654321", createdat: "2025-01-02T11:30:00Z" },
     { name: "Charlie Brown", phone: "+15559871234", createdat: "2025-01-03T09:45:00Z" },
@@ -31,4 +31,17 @@ export class RecieverService {
   ]
 
   constructor() { }
+
+  addReciever(reciever: Reciever){
+    this.users.push(reciever)
+  }
+
+  removeReciever(name: string){
+    const users = this.users.filter(user=> user.name !== name);
+    this.users = users;
+  }
+
+  getRecievers(){
+    return this.users;
+  }
 }
