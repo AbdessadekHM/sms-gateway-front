@@ -103,7 +103,17 @@
   <!-- Mobile menu -->
   <div class="md:hidden" [class.hidden]="!isMobileMenuOpen">
     <div class="px-6 pt-2 pb-3 space-y-1">
-      <a
+
+        <a
+          *ngFor="let link of renderedLinks"
+
+          href="{{ link.isHref? link.href: '' }}"
+          routerLink="{{ !link.isHref? '': link.url }}"
+          class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)]"
+        >
+       {{link.name}} 
+      </a>
+      <!-- <a
         href="/"
         class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)]"
         >Home</a
@@ -113,11 +123,12 @@
         class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)]"
         >About Us</a
       >
+
       <a
         href="#contact"
         class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)]"
         >Contact Us</a
-      >
+      > -->
       <div *ngIf="!authService.isAuthenticated()">
         <a
           (click)="onLogin()"

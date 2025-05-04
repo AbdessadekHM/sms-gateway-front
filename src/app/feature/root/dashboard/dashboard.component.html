@@ -1,6 +1,92 @@
-<section class="w-full h-[100vh] flex justify-center items-center">
+<div class="min-h-screen bg-gray-50">
+  <div class="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
+    <!-- Subnav -->
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+      <div class="relative w-full sm:w-auto">
+        <app-input
+          [type]="'text'"
+          [id]="'search'"
+          [placeholder]="'Search...'"
+          [isRequired]="false"
+          class="w-1/2"
+          
+        ></app-input>
+        <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7 7 0 1116.65 16.65z"></path>
+          </svg>
+        </span>
+      </div>
+      <div class="flex space-x-3">
+        <app-primary-btn
+          [text]="'Add Group'"
+          
+        ></app-primary-btn>
+        <app-primary-btn
+          [text]="'Add Receiver'"
+          
+        ></app-primary-btn>
+      </div>
+    </div>
 
+    <!-- Tabs -->
+    <div class="mb-8">
+      <div class="border-b border-gray-200">
+        <nav class="flex space-x-8">
+          <button
+            class="relative pb-3 text-lg font-semibold transition-colors duration-200"
+            [ngClass]="{'text-primary border-b-4 border-primary': activeTab === 'users', 'text-gray-500 hover:text-primary': activeTab !== 'users'}"
+            (click)="activeTab = 'users'"
+          >Users</button>
+          <button
+            class="relative pb-3 text-lg font-semibold transition-colors duration-200"
+            [ngClass]="{'text-primary border-b-4 border-primary': activeTab === 'groups', 'text-gray-500 hover:text-primary': activeTab !== 'groups'}"
+            (click)="activeTab = 'groups'"
+          >Groups</button>
+        </nav>
+      </div>
+    </div>
 
-
-</section>
-
+    <!-- Content -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8" *ngIf="activeTab === 'users'">
+      <div class="overflow-x-auto">
+        <table class="w-full table-auto">
+          <thead>
+            <tr class="text-left text-gray-500 text-sm uppercase tracking-wide border-b">
+              <th class="py-4 px-2">Full Name</th>
+              <th class="py-4 px-2">Phone</th>
+              <th class="py-4 px-2">Created At</th>
+              <th class="py-4 px-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of mockUsers; let i = index" class="border-b last:border-none hover:bg-gray-50 transition-colors duration-150">
+              <td class="py-4 px-2">{{ user.fullName }}</td>
+              <td class="py-4 px-2">{{ user.phone }}</td>
+              <td class="py-4 px-2">{{ user.createdAt }}</td>
+              <td class="py-4 px-2 space-x-2">
+                <button
+                  class="bg-secondary hover:bg-secondary/90 text-white px-4 py-1.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
+                  (click)="sendSMS(user)"
+                >SMS</button>
+                <button
+                  class="bg-secondary hover:bg-secondary/90 text-white px-4 py-1.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
+                  (click)="sendWhatsApp(user)"
+                >WhatsApp</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="flex justify-center mt-6">
+        <nav class="flex space-x-2">
+          <button
+            *ngFor="let page of [1, 2]"
+            class="px-4 py-2 text-sm font-medium rounded-lg hover:bg-primary-light hover:text-primary transition-all duration-200"
+            [ngClass]="{'bg-primary-light text-primary': page === 1, 'text-gray-600': page !== 1}"
+          >{{ page }}</button>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
