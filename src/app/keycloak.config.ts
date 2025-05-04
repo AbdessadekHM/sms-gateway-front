@@ -10,20 +10,20 @@ import {
 
 const localhostCondition =
   createInterceptorCondition<IncludeBearerTokenCondition>({
-    urlPattern: /^(http:\/\/localhost:8888)(\/.*)?$/i,
+    urlPattern: /^(http:\/\/localhost:9000)(\/.*)?$/i,
   });
 
 export const provideKeycloakAngular = () =>
   provideKeycloak({
     config: {
-      realm: 'myrealm',
-      url: 'http://localhost:8089',
+      realm: 'myrealme',
+      url: 'http://localhost:9000',
       clientId: 'ecom-bdcc-first',
     },
     initOptions: {
       onLoad: 'check-sso',
       silentCheckSsoRedirectUri:
-        window.location.origin + '/silent-check-sso.html',
+      window.location.origin + '/silent-check-sso.html',
       redirectUri: window.location.origin + '/',
     },
     features: [

@@ -19,6 +19,11 @@ export class AuthService {
   }
 
   public async logout() {
+    console.log('Logging out...');
+    this.getProfile().then((profile) => {
+      console.log('User profile:', profile);
+
+    })
     await this.keycloak.logout({
       redirectUri: window.location.origin,
     });

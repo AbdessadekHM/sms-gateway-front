@@ -33,6 +33,7 @@ export class NavbarComponent implements OnInit {
     try {
       await this.authService.login();
       this.profile = await this.authService.getProfile();
+      console.log('User profile:', this.profile);
     } catch (error) {
       console.error('Login failed:', error);
     }

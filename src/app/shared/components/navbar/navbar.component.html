@@ -39,7 +39,7 @@
           <a
             *ngIf="authService.isAuthenticated()"
             (click)="onLogout()"
-            class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200"
+            class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer"
           >
             Logout
           </a>
@@ -47,13 +47,13 @@
             <a
               *ngIf="!authService.isAuthenticated()"
               (click)="onLogin()"
-              class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200"
+              class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer"
             >
               Login
             </a>
             <a
-              href="/register"
-              class="bg-[var(--color-primary)] text-white px-8 py-2.5 rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors duration-200 font-medium"
+              (click)="onRegister()"
+              class="bg-[var(--color-primary)] text-white px-8 py-2.5 rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors duration-200 font-medium cursor-pointer"
             >
               Register Now →
             </a>

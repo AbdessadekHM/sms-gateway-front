@@ -1,6 +1,8 @@
 <html>
   <body>
     <script>
+      console.log("this is the location href: "+location.href)
+      console.log("this is the location origin: "+location.origin)
       parent.postMessage(location.href, location.origin);
     </script>
   </body>
