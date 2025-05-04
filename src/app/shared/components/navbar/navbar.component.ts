@@ -3,11 +3,13 @@ import { CommonModule, NgIf } from '@angular/common';
 
 import { KeycloakProfile } from 'keycloak-js';
 import { AuthService } from '../../../core/services/auth.service';
+import { RouterLink } from '@angular/router';
+import { AuthenticatedLinks, Link, UnauthenticatedLinks } from '../../models/NavLinks';
 
 
 @Component({
   selector: 'app-navbar',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent implements OnInit {
@@ -15,15 +17,22 @@ export class NavbarComponent implements OnInit {
   protected authService = inject(AuthService);
   profile: KeycloakProfile | null = null;
 
+  public renderedLinks!: Link[];
+
+
   async ngOnInit(): Promise<void> {
     try {
       if (this.authService.isAuthenticated()) {
+        this.renderedLinks = AuthenticatedLinks
         this.profile = await this.authService.getProfile();
+      }else{
+        this.renderedLinks = UnauthenticatedLinks
       }
     } catch (error) {
       console.error('Error initializing profile:', error);
     }
   }
+  
 
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
@@ -55,4 +64,6 @@ export class NavbarComponent implements OnInit {
       console.error('Registration failed:', error);
     }
   }
+
+
 }

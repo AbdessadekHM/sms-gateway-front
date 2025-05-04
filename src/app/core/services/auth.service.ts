@@ -14,7 +14,7 @@ export class AuthService {
     // log the current url
     console.log('Current URL:', window.location.href);
     await this.keycloak.login({
-      redirectUri: window.location.origin,
+      redirectUri: window.location.origin+"/dashboard",
     });
   }
 
