@@ -18,8 +18,8 @@
         <a
           *ngFor="let link of renderedLinks"
 
-          href="{{ link.isHref? link.href: '' }}"
-          routerLink="{{ !link.isHref? '': link.url }}"
+
+          routerLink="{{ link.url }}"
           
           
           class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer"
@@ -107,8 +107,8 @@
         <a
           *ngFor="let link of renderedLinks"
 
-          href="{{ link.isHref? link.href: '' }}"
-          routerLink="{{ !link.isHref? '': link.url }}"
+
+          routerLink="{{link.url}}"
           class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)]"
         >
        {{link.name}} 

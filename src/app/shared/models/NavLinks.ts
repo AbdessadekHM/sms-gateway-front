@@ -13,7 +13,7 @@ export const UnauthenticatedLinks: Link[] = [
 ]
 
 export const AuthenticatedLinks: Link[] = [
-    { name: 'Dashboard', url: '/dashboard' },
-    { name: 'Profile', url: '/profile' },
-    { name: 'Settings', url: '/settings' }
+    { name: 'Dashboard', url: '/dashboard', isHref: false },
+    { name: 'Profile', url: '/profile', isHref: false },
+    { name: 'Settings', url: '/settings', isHref: false },
 ]

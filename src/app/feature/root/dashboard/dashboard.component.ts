@@ -1,45 +1,38 @@
-// import { Component } from '@angular/core';
-// import { PrimaryBtnComponent } from "../../../shared/components/button/primary-btn/primary-btn.component";
-// import { InputComponent } from "../../../shared/components/input/input.component";
-
-// @Component({
-//   selector: 'app-dashboard',
-//   imports: [PrimaryBtnComponent, InputComponent],
-//   templateUrl: './dashboard.component.html',
-//   styleUrl: './dashboard.component.css'
-// })
-// export class DashboardComponent {
-
-// }
-
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { InputComponent } from "../../../shared/components/input/input.component";
 import { PrimaryBtnComponent } from "../../../shared/components/button/primary-btn/primary-btn.component";
 import { CommonModule } from '@angular/common';
-import { RecieverService } from '../../../core/services/reciever.service';
-import { Reciever } from '../../../shared/models/Reciever';
+import { ReceiverService } from '../../../core/services/receiver.service';
+import { Receiver } from '../../../shared/models/Reciever';
+import { ModalComponent } from "../../../shared/components/modal/modal.component";
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  imports: [CommonModule,InputComponent, PrimaryBtnComponent]
+  imports: [CommonModule, RouterLink, InputComponent, PrimaryBtnComponent ]
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   activeTab = 'users';
 
-  mockUsers!: Reciever[];
+  mockUsers!: Receiver[];
   indexes!: number[];
 
   index: number = 1;
-  renderedUsers!: Reciever[];
+  renderedUsers!: Receiver[];
   
+  isModalOpen = false;
 
-  constructor(private recieverService: RecieverService){
-    this.mockUsers = this.recieverService.getRecievers()
+  constructor(private recieverService: ReceiverService){}
+  ngOnInit(): void {
+    
+
+    this.mockUsers = this.recieverService.getReceivers()
     this.indexes = [...Array(Math.round(this.mockUsers.length/8)).keys()].map(index=>index+1)
     this.renderedUsers = this.mockUsers.slice(0, 8 )
-    
+
+    console.log(this.mockUsers);
   }
   
   onIndexChange(page: number){
@@ -51,6 +44,20 @@ export class DashboardComponent {
     
     
 
+  }
+  openModal() {
+    console.log("Modal opened");
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    console.log('Modal closed');
+    this.isModalOpen = false;
+  }
+
+  handleSubmit() {
+    console.log('Form submitted');
+    this.closeModal();
   }
 
   sendSMS(user: any) {

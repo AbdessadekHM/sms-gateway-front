@@ -3,6 +3,7 @@ import { HomeComponent } from './feature/landing/home/home.component';
 import { LoginComponent } from './feature/auth/login/login.component';
 import { RegisterComponent } from './feature/auth/register/register.component';
 import { DashboardComponent } from './feature/root/dashboard/dashboard.component';
+import { AddReceiverComponent } from './feature/root/add-receiver/add-receiver.component';
 
 
 export const routes: Routes = [
@@ -10,5 +11,6 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'dashboard', component: DashboardComponent },
+  { path: 'add-receiver', component: AddReceiverComponent },
   { path: '**', redirectTo: '' },
 ];

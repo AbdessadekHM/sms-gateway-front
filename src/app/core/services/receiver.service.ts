@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Reciever } from '../../shared/models/Reciever';
+import { Receiver} from '../../shared/models/Reciever';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RecieverService {
+export class ReceiverService {
 
-  private users: Reciever[] = [
+  private users: Receiver[] = [
     { name: "Alice Johnson", phone: "+15551234567", createdat: "2025-01-01T10:00:00Z" },
     { name: "Bob Smith", phone: "+15557654321", createdat: "2025-01-02T11:30:00Z" },
     { name: "Charlie Brown", phone: "+15559871234", createdat: "2025-01-03T09:45:00Z" },
@@ -32,16 +32,16 @@ export class RecieverService {
 
   constructor() { }
 
-  addReciever(reciever: Reciever){
+  addReceiver(reciever: Receiver){
     this.users.push(reciever)
   }
 
-  removeReciever(name: string){
+  removeReceiver(name: string){
     const users = this.users.filter(user=> user.name !== name);
     this.users = users;
   }
 
-  getRecievers(){
+  getReceivers(){
     return this.users;
   }
 }
