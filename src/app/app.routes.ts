@@ -5,6 +5,7 @@ import { RegisterComponent } from './feature/auth/register/register.component';
 import { DashboardComponent } from './feature/root/dashboard/dashboard.component';
 import { AddReceiverComponent } from './feature/root/add-receiver/add-receiver.component';
 import { AddGroupComponent } from './feature/root/add-group/add-group.component';
+import { SendSmsComponent } from './feature/root/send-sms/send-sms.component';
 
 
 export const routes: Routes = [
@@ -14,5 +15,6 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'add-receiver', component: AddReceiverComponent },
   { path: 'add-group', component: AddGroupComponent },
-  { path: '**', redirectTo: '' },
+  { path: 'send-sms/:type/:id', component: SendSmsComponent },
+//  { path: '**', redirectTo: '' },
 ];
