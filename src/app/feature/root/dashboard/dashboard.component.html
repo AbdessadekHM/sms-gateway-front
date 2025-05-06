@@ -76,7 +76,8 @@
                 >SMS</button>
                 <button
                   class="bg-accent hover:bg-primary-dark text-white px-4 py-1.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
-                  (click)="sendWhatsApp(user)"
+                  routerLink="/send-whatsapp/receiver/{{ user.id }}"
+                  
                 >WhatsApp</button>
               </td>
             </tr>

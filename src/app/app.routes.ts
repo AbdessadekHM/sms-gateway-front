@@ -6,6 +6,7 @@ import { DashboardComponent } from './feature/root/dashboard/dashboard.component
 import { AddReceiverComponent } from './feature/root/add-receiver/add-receiver.component';
 import { AddGroupComponent } from './feature/root/add-group/add-group.component';
 import { SendSmsComponent } from './feature/root/send-sms/send-sms.component';
+import { SendWhatsappComponent } from './feature/root/send-whatsapp/send-whatsapp.component';
 
 
 export const routes: Routes = [
@@ -16,5 +17,6 @@ export const routes: Routes = [
   { path: 'add-receiver', component: AddReceiverComponent },
   { path: 'add-group', component: AddGroupComponent },
   { path: 'send-sms/:type/:id', component: SendSmsComponent },
+  { path: 'send-whatsapp/:type/:id', component: SendWhatsappComponent },
 //  { path: '**', redirectTo: '' },
 ];
