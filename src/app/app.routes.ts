@@ -4,6 +4,7 @@ import { LoginComponent } from './feature/auth/login/login.component';
 import { RegisterComponent } from './feature/auth/register/register.component';
 import { DashboardComponent } from './feature/root/dashboard/dashboard.component';
 import { AddReceiverComponent } from './feature/root/add-receiver/add-receiver.component';
+import { AddGroupComponent } from './feature/root/add-group/add-group.component';
 
 
 export const routes: Routes = [
@@ -12,5 +13,6 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'add-receiver', component: AddReceiverComponent },
+  { path: 'add-group', component: AddGroupComponent },
   { path: '**', redirectTo: '' },
 ];

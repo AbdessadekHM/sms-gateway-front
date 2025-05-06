@@ -1,0 +1,82 @@
+<div class="min-h-screen bg-gray-50 flex items-center justify-center py-8">
+  <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8 w-full max-w-md mx-4">
+    <form [formGroup]="groupForm" class="space-y-6">
+      <h2 class="text-2xl font-semibold text-gray-800">Add Group</h2>
+
+
+      <div>
+        <label for="groupName" class="block text-sm font-medium text-gray-700 mb-1">Group Name</label>
+        <input
+          id="groupName"
+          formControlName="groupName"
+          type="text"
+          placeholder="Enter group name"
+          class="w-full px-4 py-2 border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light transition-all duration-200"
+          [ngClass]="{'border-red-500': groupForm.get('groupName')?.invalid && groupForm.get('groupName')?.touched}"
+        >
+        <div *ngIf="groupForm.get('groupName')?.invalid && groupForm.get('groupName')?.touched" class="text-red-500 text-sm mt-1">
+          Group name is required.
+        </div>
+      </div>
+
+
+      <div>
+        <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+        <textarea
+          id="description"
+          formControlName="description"
+          placeholder="Enter description"
+          class="w-full px-4 py-2 border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light transition-all duration-200 resize-y"
+          rows="4"
+        ></textarea>
+      </div>
+
+
+      <div>
+        <label for="members" class="block text-sm font-medium text-gray-700 mb-1">Members</label>
+        <div class="relative">
+          <input
+            type="text"
+            placeholder="Search members..."
+            class="w-full px-4 py-2 border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light transition-all duration-200"
+            (input)="filterMembers($event)"
+            (focus)="onFocus()"
+            (blur)="onBlur()"
+          >
+          <div *ngIf="isFocused" class="absolute top-12 left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto z-10">
+            <div *ngFor="let member of filteredMembers" class="px-4 py-2 hover:bg-gray-50 flex items-center">
+              <input
+                type="checkbox"
+                [value]="member.name"
+                (change)="toggleMember($event, member)"
+                class="mr-2 rounded border-gray-300 focus:ring-primary-light"
+              >
+              <span>{{ member.name }}</span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="groupForm.get('members')?.invalid && groupForm.get('members')?.touched" class="text-red-500 text-sm mt-1">
+          At least one member is required.
+        </div>
+        <div class="mt-2 text-sm text-gray-600">
+          Selected: {{ selectedMembers.length }} member(s)
+        </div>
+      </div>
+
+
+      <div class="flex justify-end space-x-3">
+        <button
+          type="button"
+          class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-5 py-2 rounded-xl shadow-sm hover:shadow-md transition-all duration-200"
+          (click)="cancel()"
+        >Cancel</button>
+        <button
+          type="button"
+          class="bg-primary hover:bg-primary-dark text-white px-5 py-2 rounded-xl shadow-sm hover:shadow-md transition-all duration-200"
+          (click)="onSubmit()"
+          [disabled]="groupForm.invalid"
+        >Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
