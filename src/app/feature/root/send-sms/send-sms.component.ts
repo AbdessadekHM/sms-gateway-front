@@ -3,10 +3,12 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Observable, switchMap } from 'rxjs';
 import { Group } from '../../../shared/models/Group';
 import { Receiver } from '../../../shared/models/Reciever';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-send-sms',
-  imports: [],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './send-sms.component.html',
   styleUrl: './send-sms.component.css'
 })
@@ -18,20 +20,23 @@ export class SendSmsComponent implements OnInit{
   selectedId!: number;
   
 
+   smsForm: FormGroup;
+  
 
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+  ) {
+    this.smsForm = this.fb.group({
+      label: ['', Validators.required],
+      message: ['']
+    });
+  }
 
-  constructor(private route: ActivatedRoute) { }
 
 
   ngOnInit(): void {
-    // this.Ids = this.route.params.pipe(
-    //   switchMap((params:Params, index:number) => {
-    //     this.selectedId = Number(params.get('id'));
-
-    //     return this.Ids
-
-    //   })
-    // )
+    
 
     this.selectedId = this.route.snapshot.paramMap.get('id') as unknown as number;
     this.selectedType = this.route.snapshot.paramMap.get('type') as unknown as string;
@@ -45,6 +50,26 @@ export class SendSmsComponent implements OnInit{
     console.log(this.selectedId, this.selectedType)
 
     
+  }
+  
+
+
+
+
+
+  onSubmit() {
+    if (this.smsForm.valid) {
+      const formValue = this.smsForm.value;
+      console.log('SMS Data:', formValue);
+      
+      this.smsForm.reset();
+    }
+  }
+
+  cancel() {
+    this.smsForm.reset();
+    
+    console.log('Form cancelled');
   }
 
 }
