@@ -1,18 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { Receiver, ReceiverPage, SearchParams } from '../../../core/models/receiver.model';
-import { AuthService } from '../../../core/services/auth.service';
-import {ReceiverService} from '../../../core/services/receiver.service';
-import {NotificationService} from '../../../core/services/notification.service';
-import {NgForOf, NgIf} from '@angular/common';
-import {ReceiverFormComponent} from '../receiver-form/receiver-form.component';
-import {VerifyPhoneComponent} from '../verify-phone/verify-phone.component';
-import {CsvImportComponent} from '../csv-import/csv-import.component';
 import {
-  ConfirmationDialogComponent
-} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+  Receiver,
+  ReceiverPage,
+  SearchParams,
+} from '../../../core/models/receiver.model';
+import { AuthService } from '../../../core/services/auth.service';
+import { ReceiverService } from '../../../core/services/receiver.service';
+import { NotificationService } from '../../../core/services/notification.service';
+import { NgForOf, NgIf } from '@angular/common';
+import { ReceiverFormComponent } from '../receiver-form/receiver-form.component';
+import { CsvImportComponent } from '../csv-import/csv-import.component';
+import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-receivers-list',
@@ -22,7 +23,6 @@ import {
     FormsModule,
     NgForOf,
     ReceiverFormComponent,
-    VerifyPhoneComponent,
     CsvImportComponent,
     ConfirmationDialogComponent,
   ],
@@ -39,25 +39,50 @@ export class ReceiversListComponent implements OnInit, OnDestroy {
   loading = false;
   selectedReceivers: number[] = [];
   showAddEditModal = false;
-  showVerifyModal = false;
   showCsvImportModal = false;
   showConfirmationDialog = false;
   confirmationMessage = '';
-  confirmationAction: () => void = () => {};
   currentReceiver: Receiver | null = null;
-  isAdmin = false;
-
   private destroy$ = new Subject<void>();
 
   constructor(
     private receiverService: ReceiverService,
     private authService: AuthService,
-    private notificationService: NotificationService
+    protected notificationService: NotificationService
   ) {}
 
-  ngOnInit(): void {
-    this.isAdmin = this.authService.hasRole('admin');
+  get allSelected(): boolean {
+    return (
+      this.receivers.length > 0 &&
+      this.selectedReceivers.length === this.receivers.length
+    );
+  }
 
+  get totalPages(): number {
+    return Math.ceil(this.totalItems / this.pageSize);
+  }
+
+  get pages(): number[] {
+    const result = [];
+    const totalPages = this.totalPages;
+
+    // Show at most 5 pages
+    const startPage = Math.max(
+      0,
+      Math.min(this.currentPage - 2, totalPages - 5)
+    );
+    const endPage = Math.min(totalPages, startPage + 5);
+
+    for (let i = startPage; i < endPage; i++) {
+      result.push(i);
+    }
+
+    return result;
+  }
+
+  confirmationAction: () => void = () => {};
+
+  ngOnInit(): void {
     this.searchControl.valueChanges
       .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe((value) => {
@@ -75,6 +100,7 @@ export class ReceiversListComponent implements OnInit, OnDestroy {
   }
 
   loadReceivers(): void {
+    console.log('Load Receivers');
     this.loading = true;
     const params: SearchParams = {
       page: this.currentPage,
@@ -82,25 +108,21 @@ export class ReceiversListComponent implements OnInit, OnDestroy {
       query: this.searchQuery,
     };
 
-    // For non-admin users, filter by current user ID
-    if (!this.isAdmin) {
-      params.userId = this.authService.getUserId() || undefined;
-    }
-
     this.receiverService
       .getReceivers(params)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        (data: ReceiverPage) => {
+      // .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data: ReceiverPage) => {
+          console.log('Receivers loaded', data);
           this.receivers = data.content;
           this.totalItems = data.totalElements;
           this.loading = false;
         },
-        (error) => {
+        error: (error) => {
           this.notificationService.showError('Failed to load receivers');
           this.loading = false;
-        }
-      );
+        },
+      });
   }
 
   onPageChange(page: number): void {
@@ -124,34 +146,8 @@ export class ReceiversListComponent implements OnInit, OnDestroy {
     this.showAddEditModal = true;
   }
 
-  openVerifyModal(receiver: Receiver): void {
-    this.currentReceiver = { ...receiver };
-    this.showVerifyModal = true;
-
-    // Send verification code
-    if (this.currentReceiver.id) {
-      this.receiverService
-        .sendVerificationCode(this.currentReceiver.id)
-        .subscribe(
-          () => {
-            this.notificationService.showInfo('Verification code sent');
-          },
-          (error) => {
-            this.notificationService.showError(
-              'Failed to send verification code'
-            );
-          }
-        );
-    }
-  }
-
   closeAddEditModal(): void {
     this.showAddEditModal = false;
-    this.currentReceiver = null;
-  }
-
-  closeVerifyModal(): void {
-    this.showVerifyModal = false;
     this.currentReceiver = null;
   }
 
@@ -169,39 +165,44 @@ export class ReceiversListComponent implements OnInit, OnDestroy {
 
     if (receiver.id) {
       // Update existing receiver
-      this.receiverService.updateReceiver(receiver).subscribe(
-        (updatedReceiver) => {
+      console.log({ receiver });
+      this.receiverService.updateReceiver(receiver).subscribe({
+        next: (updatedReceiver) => {
           this.notificationService.showSuccess('Receiver updated successfully');
           this.loadReceivers();
           this.closeAddEditModal();
         },
-        (error) => {
+        error: (error) => {
           this.notificationService.showError('Failed to update receiver');
           this.loading = false;
-        }
-      );
+          this.closeAddEditModal();
+        },
+      });
     } else {
       // Add new receiver
       if (!receiver.userId) {
-        receiver.userId = this.authService.getUserId() || 0;
+        receiver.userId = <string>this.authService.getUserId();
       }
-
-      this.receiverService.createReceiver(receiver).subscribe(
-        (newReceiver) => {
+      console.log('Adding receiver', receiver);
+      this.receiverService.createReceiver(receiver).subscribe({
+        next: (newReceiver) => {
           this.notificationService.showSuccess('Receiver added successfully');
           this.loadReceivers();
           this.closeAddEditModal();
-
-          // Open verification modal for the new receiver
-          if (newReceiver) {
-            this.openVerifyModal(newReceiver);
-          }
         },
-        (error) => {
-          this.notificationService.showError('Failed to add receiver');
+        error: (error) => {
           this.loading = false;
-        }
-      );
+          console.log('Error adding receiver', { error });
+          if (error.error && error.error.errorMessage) {
+            console.log(error.error.errorMessage);
+            const errorMessage = error.error.errorMessage;
+            this.notificationService.showError(errorMessage);
+          } else {
+            this.notificationService.showError('Failed to add receiver');
+          }
+          this.closeAddEditModal();
+        },
+      });
     }
   }
 
@@ -237,33 +238,35 @@ export class ReceiversListComponent implements OnInit, OnDestroy {
 
   deleteReceiver(id: number): void {
     this.loading = true;
-    this.receiverService.deleteReceiver(id).subscribe(
-      () => {
+    this.receiverService.deleteReceiver(id).subscribe({
+      next: () => {
         this.notificationService.showSuccess('Receiver deleted successfully');
         this.loadReceivers();
       },
-      (error) => {
+      error: () => {
         this.notificationService.showError('Failed to delete receiver');
         this.loading = false;
-      }
-    );
+      },
+    });
   }
 
   batchDeleteReceivers(): void {
     this.loading = true;
-    this.receiverService.batchDelete(this.selectedReceivers).subscribe(
-      (count) => {
+    console.log(this.selectedReceivers);
+    this.receiverService.batchDelete(this.selectedReceivers).subscribe({
+      next: (count) => {
+        // get count from header Deleted Count
         this.notificationService.showSuccess(
           `${count} receivers deleted successfully`
         );
         this.selectedReceivers = [];
         this.loadReceivers();
       },
-      (error) => {
+      error: (error) => {
         this.notificationService.showError('Failed to delete receivers');
         this.loading = false;
-      }
-    );
+      },
+    });
   }
 
   onSelectAll(event: Event): void {
@@ -286,34 +289,5 @@ export class ReceiversListComponent implements OnInit, OnDestroy {
 
   isSelected(id: number): boolean {
     return this.selectedReceivers.includes(id);
-  }
-
-  get allSelected(): boolean {
-    return (
-      this.receivers.length > 0 &&
-      this.selectedReceivers.length === this.receivers.length
-    );
-  }
-
-  get totalPages(): number {
-    return Math.ceil(this.totalItems / this.pageSize);
-  }
-
-  get pages(): number[] {
-    const result = [];
-    const totalPages = this.totalPages;
-
-    // Show at most 5 pages
-    const startPage = Math.max(
-      0,
-      Math.min(this.currentPage - 2, totalPages - 5)
-    );
-    const endPage = Math.min(totalPages, startPage + 5);
-
-    for (let i = startPage; i < endPage; i++) {
-      result.push(i);
-    }
-
-    return result;
   }
 }

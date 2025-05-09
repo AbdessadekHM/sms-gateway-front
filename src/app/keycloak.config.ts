@@ -7,18 +7,19 @@ import {
   AutoRefreshTokenService,
   UserActivityService,
 } from 'keycloak-angular';
+import { environment } from '../environments/environment';
 
 const localhostCondition =
   createInterceptorCondition<IncludeBearerTokenCondition>({
-    urlPattern: /^(http:\/\/localhost:8888)(\/.*)?$/i,
+    urlPattern: /^(http:\/\/localhost:6003)(\/.*)?$/i,
   });
 
 export const provideKeycloakAngular = () =>
   provideKeycloak({
     config: {
-      realm: 'myrealm',
-      url: 'http://localhost:8089',
-      clientId: 'ecom-bdcc-first',
+      realm: environment.keycloak.realm,
+      url: environment.keycloak.url,
+      clientId: environment.keycloak.clientId,
     },
     initOptions: {
       onLoad: 'check-sso',

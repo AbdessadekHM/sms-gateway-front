@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import {NgIf} from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-confirmation-dialog',
-  imports: [NgIf],
+  imports: [NgIf, NgClass],
   templateUrl: './confirmation-dialog.component.html',
 })
 export class ConfirmationDialogComponent {

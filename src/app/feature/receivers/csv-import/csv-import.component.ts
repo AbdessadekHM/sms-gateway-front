@@ -6,9 +6,6 @@ import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgForOf, NgIf } from '@angular/common';
-import { RoleDirective } from '../../../core/directives/role.directive';
-import { VerifyPhoneComponent } from '../verify-phone/verify-phone.component';
-import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   imports: [

@@ -5,7 +5,6 @@ import { ReceiversListComponent } from './receivers-list/receivers-list.componen
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RoleDirective } from '../../core/directives/role.directive';
 import { ReceiverFormComponent } from './receiver-form/receiver-form.component';
-import { VerifyPhoneComponent } from './verify-phone/verify-phone.component';
 import { CsvImportComponent } from './csv-import/csv-import.component';
 import { ConfirmationDialogComponent } from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
@@ -22,7 +21,6 @@ const routes: Routes = [{ path: '', component: ReceiversListComponent }];
     FormsModule,
     NgForOf,
     ReceiverFormComponent,
-    VerifyPhoneComponent,
     CsvImportComponent,
     ConfirmationDialogComponent,
   ],

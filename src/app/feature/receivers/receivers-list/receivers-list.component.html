@@ -1,7 +1,11 @@
 <div class="bg-white shadow-md rounded-lg overflow-hidden">
-  <div class="p-4 border-b flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+  <div
+    class="p-4 border-b flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0"
+  >
     <h2 class="text-xl font-semibold text-gray-800">SMS Receivers</h2>
-    <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
+    <div
+      class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2"
+    >
       <div class="relative">
         <input
           type="text"
@@ -9,24 +13,48 @@
           placeholder="Search receivers..."
           class="input input-bordered input-sm w-full sm:w-64"
         />
-        <div *ngIf="loading" class="absolute right-3 top-1/2 transform -translate-y-1/2">
-          <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900"></div>
+        <div
+          *ngIf="loading"
+          class="absolute right-3 top-1/2 transform -translate-y-1/2"
+        >
+          <div
+            class="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900"
+          ></div>
         </div>
       </div>
 
       <button (click)="openAddModal()" class="btn btn-primary btn-sm">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
-             stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4 mr-1"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 4v16m8-8H4"
+          />
         </svg>
         Add Receiver
       </button>
 
       <button (click)="openCsvImportModal()" class="btn btn-outline btn-sm">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
-             stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4 mr-1"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
+          />
         </svg>
         Import CSV
       </button>
@@ -34,11 +62,21 @@
       <button
         [disabled]="selectedReceivers.length === 0"
         (click)="confirmBatchDelete()"
-        class="btn btn-error btn-sm">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
-             stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        class="btn btn-error btn-sm"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4 mr-1"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+          />
         </svg>
         Delete Selected
       </button>
@@ -49,126 +87,178 @@
   <div class="overflow-x-auto">
     <table class="table table-zebra w-full">
       <thead>
-      <tr>
-        <th class="w-12">
-          <input
-            type="checkbox"
-            [checked]="allSelected"
-            (change)="onSelectAll($event)"
-            class="checkbox checkbox-sm"
-          />
-        </th>
-        <th>Name</th>
-        <th>Phone Number</th>
-        <th>Status</th>
-        <th class="w-32 text-right">Actions</th>
-      </tr>
+        <tr>
+          <th class="w-12">
+            <input
+              type="checkbox"
+              [checked]="allSelected"
+              (change)="onSelectAll($event)"
+              class="checkbox checkbox-sm"
+            />
+          </th>
+          <th>Name</th>
+          <th>Phone Number</th>
+          <th>Status</th>
+          <th class="w-32 text-right">Actions</th>
+        </tr>
       </thead>
       <tbody>
-      <tr *ngIf="receivers.length === 0 && !loading">
-        <td colspan="5" class="text-center py-8 text-gray-500">
-          <p>No receivers found.</p>
-          <button (click)="openAddModal()" class="btn btn-sm btn-outline mt-2">Add a receiver</button>
-        </td>
-      </tr>
-      <tr *ngIf="loading && receivers.length === 0">
-        <td colspan="5" class="text-center py-8">
-          <div class="flex justify-center">
-            <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-900"></div>
-          </div>
-        </td>
-      </tr>
-      <tr *ngFor="let receiver of receivers">
-        <td>
-          <input
-            type="checkbox"
-            [checked]="isSelected(receiver.id!)"
-            (change)="onSelectReceiver($event, receiver.id!)"
-            class="checkbox checkbox-sm"
-          />
-        </td>
-        <td>{{ receiver.name }}</td>
-        <td>{{ receiver.phoneNumber }}</td>
-        <td>
-          <span *ngIf="receiver.verified" class="badge badge-success">Verified</span>
-          <span *ngIf="!receiver.verified" class="badge badge-warning">Unverified</span>
-        </td>
-        <td class="text-right">
-          <div class="flex space-x-2">
+        <tr *ngIf="receivers.length === 0 && !loading">
+          <td colspan="5" class="text-center py-8 text-gray-500">
+            <p>No receivers found.</p>
             <button
-              (click)="openEditModal(receiver)"
-              class="p-2 text-gray-600 hover:bg-gray-200 rounded focus:outline-none"
-              title="Edit">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                   stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-              </svg>
+              (click)="openAddModal()"
+              class="btn btn-sm btn-outline mt-2"
+            >
+              Add a receiver
             </button>
-            <button
-              (click)="openVerifyModal(receiver)"
-              class="p-2 text-gray-600 hover:bg-gray-200 rounded focus:outline-none"
-              [disabled]="receiver.verified"
-              title="Verify">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                   stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-            </button>
-            <button
-              (click)="confirmDelete(receiver)"
-              class="p-2 text-red-500 hover:bg-red-200 rounded focus:outline-none"
-              title="Delete">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                   stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-            </button>
-          </div>
-        </td>
-      </tr>
+          </td>
+        </tr>
+        <tr *ngIf="loading && receivers.length === 0">
+          <td colspan="5" class="text-center py-8">
+            <div class="flex justify-center">
+              <div
+                class="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-900"
+              ></div>
+            </div>
+          </td>
+        </tr>
+        <tr *ngFor="let receiver of receivers">
+          <td>
+            <input
+              type="checkbox"
+              [checked]="isSelected(receiver.id!)"
+              (change)="onSelectReceiver($event, receiver.id!)"
+              class="checkbox checkbox-sm"
+            />
+          </td>
+          <td>{{ receiver.name }}</td>
+          <td>{{ receiver.phoneNumber }}</td>
+          <td>
+            <span *ngIf="receiver.verified" class="badge badge-success"
+              >Verified</span
+            >
+            <span *ngIf="!receiver.verified" class="badge badge-warning"
+              >Unverified</span
+            >
+          </td>
+          <td class="text-right">
+            <div class="flex space-x-2">
+              <button
+                (click)="openEditModal(receiver)"
+                class="p-2 text-gray-600 hover:bg-gray-200 rounded focus:outline-none"
+                title="Edit"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                  />
+                </svg>
+              </button>
+              <button
+                (click)="confirmDelete(receiver)"
+                class="p-2 text-red-500 hover:bg-red-200 rounded focus:outline-none"
+                title="Delete"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
 
   <!-- Pagination -->
-  <div class="p-4 border-t flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+  <div
+    class="p-4 border-t flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0"
+  >
     <div class="text-sm text-gray-500">
       Showing {{ receivers.length }} of {{ totalItems }} receivers
     </div>
-    <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
+    <div
+      class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2"
+    >
       <div class="flex">
         <select
           [ngModel]="pageSize"
           (ngModelChange)="onPageSizeChange($event)"
-          class="select select-bordered select-sm">
-          <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }} per page</option>
+          class="select select-bordered select-sm"
+        >
+          <option *ngFor="let size of pageSizeOptions" [value]="size">
+            {{ size }} per page
+          </option>
         </select>
       </div>
       <div class="btn-group">
         <button
           [disabled]="currentPage === 0"
           (click)="onPageChange(currentPage - 1)"
-          class="btn btn-sm">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          class="btn btn-sm"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
         </button>
         <button
           *ngFor="let page of pages"
           [class.btn-active]="page === currentPage"
           (click)="onPageChange(page)"
-          class="btn btn-sm">
+          class="btn btn-sm"
+        >
           {{ page + 1 }}
         </button>
         <button
           [disabled]="currentPage >= totalPages - 1"
           (click)="onPageChange(currentPage + 1)"
-          class="btn btn-sm">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          class="btn btn-sm"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            />
           </svg>
         </button>
       </div>
@@ -181,21 +271,12 @@
   *ngIf="showAddEditModal"
   [receiver]="currentReceiver"
   (close)="closeAddEditModal()"
-  (save)="onSaveReceiver($event)">
+  (save)="onSaveReceiver($event)"
+>
 </app-receiver-form>
 
-<!-- Verify Phone Modal -->
-<app-verify-phone
-  *ngIf="showVerifyModal && currentReceiver"
-  [receiver]="currentReceiver"
-  (close)="closeVerifyModal()"
-  (verified)="loadReceivers()">
-</app-verify-phone>
-
 <!-- CSV Import Modal -->
-<app-csv-import
-  *ngIf="showCsvImportModal"
-  (close)="closeCsvImportModal()">
+<app-csv-import *ngIf="showCsvImportModal" (close)="closeCsvImportModal()">
 </app-csv-import>
 
 <!-- Confirmation Dialog -->
@@ -207,5 +288,6 @@
   [cancelText]="'Cancel'"
   [isDanger]="true"
   (confirm)="executeConfirmedAction()"
-  (cancel)="cancelConfirmation()">
+  (cancel)="cancelConfirmation()"
+>
 </app-confirmation-dialog>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Keycloak from 'keycloak-js';
-import {from, Observable} from 'rxjs';
+import { from, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +26,7 @@ export class AuthService {
     return !!this.keycloak.authenticated;
   }
 
-getCurrentUser(): Observable<Keycloak.KeycloakProfile> {
+  getCurrentUser(): Observable<Keycloak.KeycloakProfile> {
     return from(this.keycloak.loadUserProfile());
   }
 
@@ -41,10 +41,10 @@ getCurrentUser(): Observable<Keycloak.KeycloakProfile> {
     );
   }
 
-  getUserId(): number | null {
+  getUserId(): string | null {
+    console.log("getUserId - keycloak profile ", this.keycloak.profile);
     if (this.keycloak.tokenParsed && this.keycloak.tokenParsed.sub) {
-      const id = parseInt(this.keycloak.tokenParsed.sub, 10);
-      return isNaN(id) ? null : id;
+      return this.keycloak.tokenParsed.sub;
     }
     return null;
   }

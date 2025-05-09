@@ -19,6 +19,9 @@ export class NavbarComponent implements OnInit {
     try {
       if (this.authService.isAuthenticated()) {
         this.profile = this.authService.getUserInfo();
+        this.profile.subscribe((user) => {
+          console.log('User profile:', user);
+        });
       }
     } catch (error) {
       console.error('Error initializing profile:', error);

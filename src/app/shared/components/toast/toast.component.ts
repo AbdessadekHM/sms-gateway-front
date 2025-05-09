@@ -1,38 +1,45 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { NotificationService, Toast } from '../../../core/services/notification.service';
+import {
+  NotificationService,
+  Toast,
+} from '../../../core/services/notification.service';
+import { NgForOf } from '@angular/common';
 
 @Component({
   selector: 'app-toast',
-  templateUrl: './toast.component.html'
+  templateUrl: './toast.component.html',
+  imports: [NgForOf],
 })
 export class ToastComponent implements OnInit, OnDestroy {
   toasts: Toast[] = [];
   private destroy$ = new Subject<void>();
-  
-  constructor(private notificationService: NotificationService) { }
-  
+
+  constructor(private notificationService: NotificationService) {}
+
   ngOnInit(): void {
-    this.notificationService.getToasts()
+    this.notificationService
+      .getToasts()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(toasts => {
+      .subscribe((toasts) => {
         this.toasts = toasts;
       });
   }
-  
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  
+
   removeToast(id: number): void {
     this.notificationService.removeToast(id);
   }
-  
+
   getToastClasses(type: string): string {
-    const baseClasses = 'p-4 rounded shadow-lg flex items-center justify-between';
-    
+    const baseClasses =
+      'p-4 rounded shadow-lg flex items-center justify-between';
+
     switch (type) {
       case 'success':
         return `${baseClasses} bg-green-100 border-l-4 border-green-500 text-green-700`;
@@ -45,7 +52,7 @@ export class ToastComponent implements OnInit, OnDestroy {
         return `${baseClasses} bg-blue-100 border-l-4 border-blue-500 text-blue-700`;
     }
   }
-  
+
   getToastIcon(type: string): string {
     switch (type) {
       case 'success':

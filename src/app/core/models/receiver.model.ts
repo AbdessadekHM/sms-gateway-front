@@ -2,7 +2,7 @@ export interface Receiver {
   id?: number;
   name: string;
   phoneNumber: string;
-  userId: number;
+  userId: string;
   verified?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
