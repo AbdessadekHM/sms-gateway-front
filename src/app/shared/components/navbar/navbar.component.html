@@ -20,17 +20,17 @@
 
 
           routerLink="{{ link.url }}"
-          
-          
+
+
           class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer"
         >
-       {{link.name}} 
+       {{link.name}}
       </a>
         <!-- Nav Links -->
 
         <!-- <a
           routerLink="/"
-          
+
           class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200"
         >
           Home
@@ -50,17 +50,11 @@
 
         <!-- Auth Links -->
         <div class="flex items-center space-x-6">
-          <a
-            *ngIf="authService.isAuthenticated()"
-            (click)="onLogout()"
-            class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer"
-          >
-            Logout
-          </a>
-          <div *ngIf="!authService.isAuthenticated()">
+
+
+          <div >
             <a
-              *ngIf="!authService.isAuthenticated()"
-              (click)="onLogin()"
+              routerLink="/login"
               class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer"
             >
               Login
@@ -111,7 +105,7 @@
           routerLink="{{link.url}}"
           class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)]"
         >
-       {{link.name}} 
+       {{link.name}}
       </a>
       <!-- <a
         href="/"
