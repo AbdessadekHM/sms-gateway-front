@@ -1,45 +1,39 @@
 import { inject, Injectable } from '@angular/core';
 import Keycloak from 'keycloak-js';
 import { Router } from '@angular/router';
+import {User} from '../../dto/user';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private keycloak = inject(Keycloak);
-  private router = inject(Router);
-  private authenticated = false;
+  public http=inject(HttpClient);
+  public  url="http://localhost:8000/"
+  public token:string="";
 
-  public async login() {
-    // log the current url
-    console.log('Current URL:', window.location.href);
-    await this.keycloak.login({
-      redirectUri: window.location.origin+"/dashboard",
-    });
+  public login(username:any, password:any) {
+  let endPoint="auth/login"
+
+    let user:User={username:username , password:password }
+    this.http.post<AuthService>(this.url+endPoint,{user}).subscribe(e => {this.token=e.token;console.log(e.token)});
+
   }
 
-  public async logout() {
-    console.log('Logging out...');
-    this.getProfile().then((profile) => {
-      console.log('User profile:', profile);
+  public  logout() {
 
-    })
-    await this.keycloak.logout({
-      redirectUri: window.location.origin,
-    });
+
   }
 
   public isAuthenticated(): boolean {
-    return !!this.keycloak.authenticated;
+    return true
   }
 
-  public async getProfile(): Promise<Keycloak.KeycloakProfile> {
-    return this.keycloak.loadUserProfile();
+  public  getProfile() {
   }
 
-  public async register() {
-    await this.keycloak.register({
-      redirectUri: window.location.href,
-    });
+  public  register() {
+
   }
 }

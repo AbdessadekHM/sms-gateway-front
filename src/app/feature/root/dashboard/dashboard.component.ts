@@ -11,7 +11,8 @@ import { RouterLink } from '@angular/router';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  imports: [CommonModule, RouterLink, InputComponent, PrimaryBtnComponent ]
+  standalone: true,
+  imports: [CommonModule, RouterLink, InputComponent, PrimaryBtnComponent]
 })
 export class DashboardComponent implements OnInit {
   activeTab = 'users';
@@ -21,12 +22,12 @@ export class DashboardComponent implements OnInit {
 
   index: number = 1;
   renderedUsers!: Receiver[];
-  
+
   isModalOpen = false;
 
   constructor(private recieverService: ReceiverService){}
   ngOnInit(): void {
-    
+
 
     this.mockUsers = this.recieverService.getReceivers()
     this.indexes = [...Array(Math.round(this.mockUsers.length/8)).keys()].map(index=>index+1)
@@ -34,15 +35,15 @@ export class DashboardComponent implements OnInit {
 
     console.log(this.mockUsers);
   }
-  
+
   onIndexChange(page: number){
     let start = 9*(page-1)
 
     this.index = page
     this.renderedUsers = this.mockUsers.slice(start ,start+9)
 
-    
-    
+
+
 
   }
   openModal() {

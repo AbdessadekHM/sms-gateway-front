@@ -4,6 +4,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   selector: 'app-primary-btn',
   imports: [],
   templateUrl: './primary-btn.component.html',
+  standalone: true,
   styleUrl: './primary-btn.component.css'
 })
 export class PrimaryBtnComponent {
@@ -17,6 +18,6 @@ export class PrimaryBtnComponent {
   onClick(){
     this.click.emit();
   }
-  
+
 
 }

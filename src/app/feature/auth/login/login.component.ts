@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormsModule,
@@ -9,13 +9,16 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import {AuthService} from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
+  standalone: true
 })
 export class LoginComponent {
+  public auth=inject(AuthService);
   loginForm: FormGroup;
   isLoading = false;
 
@@ -34,6 +37,12 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       this.isLoading = true;
+
+      this.auth.login(this.username,this.password)
+
+
+
+
       // Simulate API call
       // TODO: Replace with actual API call
       this.http
