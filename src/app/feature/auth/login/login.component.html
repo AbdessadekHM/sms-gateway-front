@@ -63,11 +63,10 @@
       <button
         type="submit"
         class="w-full px-4 py-3 mt-6 text-sm font-medium text-white bg-primary hover:bg-primary-focus rounded-lg transition-colors"
-        [disabled]="loginForm.invalid || isLoading"
       >
-        <span *ngIf="!isLoading">Sign In</span>
+        <span >Sign In</span>
         <span
-          *ngIf="isLoading"
+
           class="loading loading-spinner loading-sm"
         ></span>
       </button>

@@ -4,6 +4,7 @@ import { Component, Input } from '@angular/core';
   selector: 'app-input',
   imports: [],
   templateUrl: './input.component.html',
+  standalone: true,
   styleUrl: './input.component.css'
 })
 export class InputComponent {
@@ -13,10 +14,10 @@ export class InputComponent {
 
   @Input()
   public placeholder?: string = "";
-  
+
   @Input()
   public value?: string = "";
-  
+
   @Input()
   public name?: string = "";
 

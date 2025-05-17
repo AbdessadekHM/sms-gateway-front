@@ -11,6 +11,7 @@ import { AuthenticatedLinks, Link, UnauthenticatedLinks } from '../../models/Nav
   selector: 'app-navbar',
   imports: [CommonModule, RouterLink],
   templateUrl: './navbar.component.html',
+  standalone: true
 })
 export class NavbarComponent implements OnInit {
   isMobileMenuOpen = false;
@@ -22,17 +23,13 @@ export class NavbarComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     try {
-      if (this.authService.isAuthenticated()) {
-        this.renderedLinks = AuthenticatedLinks
-        this.profile = await this.authService.getProfile();
-      }else{
-        this.renderedLinks = UnauthenticatedLinks
-      }
+
+
     } catch (error) {
       console.error('Error initializing profile:', error);
     }
   }
-  
+
 
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
@@ -40,9 +37,7 @@ export class NavbarComponent implements OnInit {
 
   async onLogin(): Promise<void> {
     try {
-      await this.authService.login();
-      this.profile = await this.authService.getProfile();
-      console.log('User profile:', this.profile);
+
     } catch (error) {
       console.error('Login failed:', error);
     }

@@ -9,5 +9,6 @@ import { FooterComponent } from './shared/components/footer/footer.component';
   selector: 'app-root',
   imports: [RouterOutlet, NavbarComponent, FooterComponent],
   templateUrl: './app.component.html',
+  standalone: true
 })
 export class AppComponent {}

@@ -1,45 +1,63 @@
 import { inject, Injectable } from '@angular/core';
 import Keycloak from 'keycloak-js';
 import { Router } from '@angular/router';
+import {User} from '../../dto/user';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {AuthResponse} from '../../dto/AuthResponse';
 
 @Injectable({
   providedIn: 'root',
+
 })
 export class AuthService {
-  private keycloak = inject(Keycloak);
-  private router = inject(Router);
-  private authenticated = false;
+  public  url="http://127.0.0.1:7001/"
+  public token:string | undefined="";
+  public valid=false
+  public router=inject(Router)
+  public http=inject(HttpClient)
+  public login(username:string, password:string) {
+  let endPoint="auth/login"
 
-  public async login() {
-    // log the current url
-    console.log('Current URL:', window.location.href);
-    await this.keycloak.login({
-      redirectUri: window.location.origin+"/dashboard",
-    });
+    let user:User={username:username , password:password }
+    let req=this.http.post<AuthResponse>(this.url+endPoint,{username:username , password:password})
+      .subscribe({next:e=> {
+          this.token = e.token;
+          if (this.token != "" && this.token != null) {
+            sessionStorage.setItem("accessToken", <string>e.token)
+            console.log(e.token);
+            this.router.navigateByUrl('/dashboard')
+
+          }},
+
+
+          error: e=>{   this.router.navigateByUrl('/register')}
+
+
+
+
+
+
+
+      });
+  return this.valid;
+
+
   }
 
-  public async logout() {
-    console.log('Logging out...');
-    this.getProfile().then((profile) => {
-      console.log('User profile:', profile);
+  public  logout() {
 
-    })
-    await this.keycloak.logout({
-      redirectUri: window.location.origin,
-    });
+
   }
 
   public isAuthenticated(): boolean {
-    return !!this.keycloak.authenticated;
+    return true
   }
 
-  public async getProfile(): Promise<Keycloak.KeycloakProfile> {
-    return this.keycloak.loadUserProfile();
+  public  getProfile() {
   }
 
-  public async register() {
-    await this.keycloak.register({
-      redirectUri: window.location.href,
-    });
+  public  register() {
+
   }
 }

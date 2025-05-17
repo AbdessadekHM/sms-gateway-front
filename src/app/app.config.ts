@@ -7,15 +7,14 @@ import {
   withFetch,
   withInterceptors,
 } from '@angular/common/http';
-import { provideKeycloakAngular } from './keycloak.config';
 import { includeBearerTokenInterceptor } from 'keycloak-angular';
 
 export const appConfig: ApplicationConfig = {
+
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withFetch()),
-    provideKeycloakAngular(),
-    provideHttpClient(withInterceptors([includeBearerTokenInterceptor])),
+    provideHttpClient(),
   ],
+
 };
