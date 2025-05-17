@@ -26,7 +26,7 @@ export class AuthService {
           if (this.token != "" && this.token != null) {
             sessionStorage.setItem("accessToken", <string>e.token)
             console.log(e.token);
-            this.router.navigateByUrl('/')
+            this.router.navigateByUrl('/dashboard')
 
           }},
 
