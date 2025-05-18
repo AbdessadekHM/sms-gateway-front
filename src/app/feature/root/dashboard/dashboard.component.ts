@@ -3,9 +3,10 @@ import { InputComponent } from "../../../shared/components/input/input.component
 import { PrimaryBtnComponent } from "../../../shared/components/button/primary-btn/primary-btn.component";
 import { CommonModule } from '@angular/common';
 import { ReceiverService } from '../../../core/services/receiver.service';
-import { Receiver } from '../../../shared/models/Reciever';
+
 import { ModalComponent } from "../../../shared/components/modal/modal.component";
 import { RouterLink } from '@angular/router';
+import { Receiver } from '../../../core/models/Reciever';
 
 @Component({
   selector: 'app-dashboard',

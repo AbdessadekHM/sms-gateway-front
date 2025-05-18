@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Observable, switchMap } from 'rxjs';
-import { Group } from '../../../shared/models/Group';
-import { Receiver } from '../../../shared/models/Reciever';
+
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Receiver } from '../../../core/models/Reciever';
+import { Group } from '../../../core/models/Group';
 
 @Component({
   selector: 'app-send-sms',

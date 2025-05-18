@@ -2,7 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ReceiverService } from '../../../core/services/receiver.service';
-import { Receiver } from '../../../shared/models/Reciever';
+import { Receiver } from '../../../core/models/Reciever';
+
 
 @Component({
   selector: 'app-add-group',

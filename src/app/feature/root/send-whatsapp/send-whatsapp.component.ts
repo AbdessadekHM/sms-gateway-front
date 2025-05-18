@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Receiver } from '../../../shared/models/Reciever';
-import { Group } from '../../../shared/models/Group';
+
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Receiver } from '../../../core/models/Reciever';
+import { Group } from '../../../core/models/Group';
 
 @Component({
   selector: 'app-send-whatsapp',
