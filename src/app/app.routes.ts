@@ -7,16 +7,17 @@ import { AddReceiverComponent } from './feature/root/add-receiver/add-receiver.c
 import { AddGroupComponent } from './feature/root/add-group/add-group.component';
 import { SendSmsComponent } from './feature/root/send-sms/send-sms.component';
 import { SendWhatsappComponent } from './feature/root/send-whatsapp/send-whatsapp.component';
+import { authGuard } from './core/guards/auth.guard';
 
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'add-receiver', component: AddReceiverComponent },
-  { path: 'add-group', component: AddGroupComponent },
-  { path: 'send-sms/:type/:id', component: SendSmsComponent },
-  { path: 'send-whatsapp/:type/:id', component: SendWhatsappComponent },
-//  { path: '**', redirectTo: '' },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
+  { path: 'add-receiver', component: AddReceiverComponent, canActivate: [authGuard] },
+  { path: 'add-group', component: AddGroupComponent, canActivate: [authGuard] },
+  { path: 'send-sms/:type/:id', component: SendSmsComponent, canActivate: [authGuard] },
+  { path: 'send-whatsapp/:type/:id', component: SendWhatsappComponent, canActivate: [authGuard] },
+  { path: '**', redirectTo: '' },
 ];
