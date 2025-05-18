@@ -108,7 +108,7 @@
     <div class="px-6 pt-2 pb-3 space-y-1">
 
         <a
-          *ngFor="let link of renderedLinks"
+          *ngFor="let link of authService.NavBarLinks"
 
 
           routerLink="{{link.url}}"
