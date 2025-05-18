@@ -16,7 +16,7 @@
       <div class="hidden md:flex items-center space-x-10">
 
         <a
-          *ngFor="let link of renderedLinks"
+          *ngFor="let link of authService.NavBarLinks"
 
 
           routerLink="{{ link.url }}"
@@ -52,7 +52,7 @@
         <div class="flex items-center space-x-6">
 
 
-          <div >
+          <div *ngIf="!authService.isAuthenticated()">
             <a
               routerLink="/login"
               class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer"
@@ -66,6 +66,15 @@
               Register Now →
             </a>
           </div>
+
+            <a
+              *ngIf="authService.isAuthenticated()"
+              (click)="onLogout()"
+              class="bg-[var(--color-primary)] text-white px-8 py-2.5 rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors duration-200 font-medium cursor-pointer"
+            >
+              Logout
+            </a>
+          
         </div>
       </div>
 

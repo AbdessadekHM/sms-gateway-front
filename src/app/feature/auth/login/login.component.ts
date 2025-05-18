@@ -10,8 +10,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {AuthResponse} from '../../../dto/AuthResponse';
-import {User} from '../../../dto/user';
+
 import {AuthService} from '../../../core/services/auth.service';
 import {routes} from '../../../app.routes';
 

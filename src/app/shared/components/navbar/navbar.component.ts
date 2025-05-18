@@ -1,10 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
 
-import { KeycloakProfile } from 'keycloak-js';
+
 import { AuthService } from '../../../core/services/auth.service';
 import { RouterLink } from '@angular/router';
-import { AuthenticatedLinks, Link, UnauthenticatedLinks } from '../../models/NavLinks';
+import { Link } from '../../../core/models/NavLinks';
+
+
 
 
 @Component({
@@ -14,21 +16,22 @@ import { AuthenticatedLinks, Link, UnauthenticatedLinks } from '../../models/Nav
   standalone: true
 })
 export class NavbarComponent implements OnInit {
+
+
+
   isMobileMenuOpen = false;
   protected authService = inject(AuthService);
-  profile: KeycloakProfile | null = null;
+  
 
   public renderedLinks!: Link[];
 
 
-  async ngOnInit(): Promise<void> {
-    try {
-
-
-    } catch (error) {
-      console.error('Error initializing profile:', error);
-    }
+  ngOnInit(): void {
+    
   }
+
+
+
 
 
   toggleMobileMenu() {
@@ -36,20 +39,11 @@ export class NavbarComponent implements OnInit {
   }
 
   async onLogin(): Promise<void> {
-    try {
-
-    } catch (error) {
-      console.error('Login failed:', error);
-    }
+    
   }
 
   async onLogout(): Promise<void> {
-    try {
-      await this.authService.logout();
-      this.profile = null;
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
+    this.authService.logout();
   }
 
   async onRegister(): Promise<void> {

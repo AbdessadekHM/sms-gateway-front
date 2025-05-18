@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Receiver} from '../../shared/models/Reciever';
+import { Receiver } from '../models/Reciever';
+
 
 @Injectable({
   providedIn: 'root'
