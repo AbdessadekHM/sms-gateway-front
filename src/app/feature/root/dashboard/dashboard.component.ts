@@ -29,19 +29,25 @@ export class DashboardComponent implements OnInit {
   constructor(private recieverService: ReceiverService){}
   ngOnInit(): void {
 
+    this.recieverService.fetchReceivers().subscribe((data) => {
+      this.mockUsers = data.content;
+      this.indexes = [...Array(Math.floor(this.mockUsers.length/8 + 1)).keys()].map(index=>index+1)
+      
+      this.renderedUsers = this.mockUsers.slice(0, 9 )
+      
+    }, (error) => {
+      console.error('Error fetching receivers:', error);
+    });
+    
 
-    this.mockUsers = this.recieverService.getReceivers()
-    this.indexes = [...Array(Math.round(this.mockUsers.length/8)).keys()].map(index=>index+1)
-    this.renderedUsers = this.mockUsers.slice(0, 8 )
 
-    console.log(this.mockUsers);
   }
 
   onIndexChange(page: number){
     let start = 9*(page-1)
 
     this.index = page
-    this.renderedUsers = this.mockUsers.slice(start ,start+9)
+    this.renderedUsers = this.mockUsers.slice(start ,start+8)
 
 
 
