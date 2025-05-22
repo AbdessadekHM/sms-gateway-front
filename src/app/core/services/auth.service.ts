@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, OnInit } from '@angular/core';
 import Keycloak from 'keycloak-js';
 import { Router } from '@angular/router';
 
@@ -13,7 +13,7 @@ import { AuthenticatedLinks, Link, UnauthenticatedLinks } from '../models/NavLin
   providedIn: 'root',
 
 })
-export class AuthService {
+export class AuthService  {
   public  url="http://127.0.0.1:7001/"
   public token:string | undefined="";
 
@@ -42,8 +42,8 @@ export class AuthService {
       .subscribe({next:e=> {
           this.token = e.token;
           if (this.token != "" && this.token != null) {
-            // sessionStorage.setItem("accessToken", <string>e.token)
-            localStorage.setItem("accessToken", <string>e.token)
+            sessionStorage.setItem("accessToken", <string>e.token)
+            // localStorage.setItem("accessToken", <string>e.token)
             console.log(e.token);
             this.isAuth = true;
             this.navBarLinks = AuthenticatedLinks;
@@ -52,7 +52,12 @@ export class AuthService {
           }},
 
 
-          error: e=>{   this.router.navigateByUrl('/register')}
+          error: e=>{   
+            console.log(e.error.message)
+            this.router.navigateByUrl('/register')
+            
+            console.log(e.error.message)
+          }
 
 
 
@@ -68,7 +73,9 @@ export class AuthService {
 
   public  logout() {
     this.isAuth = false;
-    localStorage.removeItem('accessToken');
+    // localStorage.removeItem('accessToken');
+    sessionStorage.removeItem('accessToken');
+    this.token = undefined;
     this.navBarLinks = UnauthenticatedLinks;
     this.router.navigateByUrl('/login');
 
