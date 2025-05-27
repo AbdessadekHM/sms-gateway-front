@@ -31,7 +31,6 @@ export class RegisterComponent implements OnInit {
       {
         firstName: ['', [Validators.required, Validators.minLength(2)]],
         lastName: ['', [Validators.required, Validators.minLength(2)]],
-        companyName: ['', Validators.required],
         phone: ['', [Validators.required, Validators.pattern('^[0-9]{10,}$')]],
         username: ['', [Validators.required, Validators.minLength(4)]],
         email: ['', [Validators.required, Validators.email]],
@@ -52,11 +51,17 @@ export class RegisterComponent implements OnInit {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      this.isLoading = true;
-      // Simulate API call
-      // TODO: Replace with actual API call
+    
+      console.log('Form Submitted!', this.registerForm.value);
+   
+      this.isLoading = false;
+      
+      const user = {...this.registerForm.value};
+      delete user.verifyPassword;
+      console.log('User data to be sent:', user);
+        
       this.http
-        .post('http://localhost:8000/api/register', this.registerForm.value)
+        .post('http://localhost:7001/auth/logup', user)
         .subscribe(
           (response) => {
             console.log('Registration successful:', response);

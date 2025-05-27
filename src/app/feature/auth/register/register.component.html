@@ -43,7 +43,7 @@
               Last name is required
             </span>
           </div>
-          <!-- Company Name -->
+          <!-- Company Name
           <div class="space-y-2">
             <label class="text-sm font-medium text-gray-700 block">
               Company Name
@@ -60,7 +60,33 @@
             >
               Company name is required
             </span>
+          </div> -->
+
+          <!-- Email -->
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700 block">
+              Email
+            </label>
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="Enter your email"
+              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-base outline-none placeholder:text-gray-400/60"
+            />
+            <span
+              *ngIf="email?.touched && email?.errors?.['required']"
+              class="text-xs text-error"
+            >
+              Email is required
+            </span>
+            <span
+              *ngIf="email?.touched && email?.errors?.['email']"
+              class="text-xs text-error"
+            >
+              Please enter a valid email
+            </span>
           </div>
+
 
           <!-- Phone Number -->
           <div class="space-y-2">
@@ -109,30 +135,6 @@
             </span>
           </div>
 
-          <!-- Email -->
-          <div class="space-y-2">
-            <label class="text-sm font-medium text-gray-700 block">
-              Email
-            </label>
-            <input
-              type="email"
-              formControlName="email"
-              placeholder="Enter your email"
-              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors text-base outline-none placeholder:text-gray-400/60"
-            />
-            <span
-              *ngIf="email?.touched && email?.errors?.['required']"
-              class="text-xs text-error"
-            >
-              Email is required
-            </span>
-            <span
-              *ngIf="email?.touched && email?.errors?.['email']"
-              class="text-xs text-error"
-            >
-              Please enter a valid email
-            </span>
-          </div>
 
           <!-- Password -->
           <div class="space-y-2">
@@ -205,8 +207,9 @@
         <button
           type="submit"
           class="px-6 py-3 text-sm font-medium text-white bg-primary hover:bg-primary-focus rounded-lg transition-colors min-w-[160px]"
-          [disabled]="registerForm.invalid || isLoading"
+          
         >
+          <!-- [disabled]="registerForm.invalid || isLoading" -->
           <span *ngIf="!isLoading">Create Account</span>
           <span
             *ngIf="isLoading"
