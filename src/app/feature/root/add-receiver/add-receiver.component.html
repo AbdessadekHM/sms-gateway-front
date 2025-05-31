@@ -1,55 +1,123 @@
-<div class="min-h-screen bg-gray-50 flex items-center justify-center py-8">
-  <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8 w-full max-w-md mx-4">
-    <form [formGroup]="receiverForm" class="space-y-6">
-      <h2 class="text-2xl font-semibold text-gray-800">Add Receiver</h2>
-
-
-      <div>
-        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-        <input
-          id="name"
-          formControlName="name"
-          type="text"
-          placeholder="Enter name"
-          class="w-full px-4 py-2 border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light transition-all duration-200"
-          [ngClass]="{'border-red-500': receiverForm.get('name')?.invalid && receiverForm.get('name')?.touched}"
-        >
-        <div *ngIf="receiverForm.get('name')?.invalid && receiverForm.get('name')?.touched" class="text-red-500 text-sm mt-1">
-          Name is required.
+<div class="min-h-screen bg-gray-50">
+  <!-- Header Section -->
+  <div class="bg-white border-b border-gray-200">
+    <div class="container mx-auto px-4 py-6 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <button
+            class="mr-4 text-gray-600 hover:text-gray-900 transition-colors"
+            [routerLink]="['/dashboard']"
+            title="Back to Dashboard"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">Add Receiver</h1>
+            <p class="mt-1 text-sm text-gray-500">Add a new receiver to your SMS Gateway</p>
+          </div>
         </div>
       </div>
+    </div>
+  </div>
 
-
-      <div>
-        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-        <input
-          id="phone"
-          formControlName="phone"
-          type="tel"
-          placeholder="Enter phone number"
-          class="w-full px-4 py-2 border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-light transition-all duration-200"
-          [ngClass]="{'border-red-500': receiverForm.get('phone')?.invalid && receiverForm.get('phone')?.touched}"
-        >
-        <div *ngIf="receiverForm.get('phone')?.invalid && receiverForm.get('phone')?.touched" class="text-red-500 text-sm mt-1">
-          <div *ngIf="receiverForm.get('phone')?.errors?.['required']">Phone number is required.</div>
-          <div *ngIf="receiverForm.get('phone')?.errors?.['pattern']">Please enter a valid phone number.</div>
+  <div class="container mx-auto px-4 py-8 sm:px-6 lg:px-8 flex items-center justify-center">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8 w-full max-w-lg mx-4">
+      <form [formGroup]="receiverForm" class="space-y-6" (ngSubmit)="onSubmit()">
+        <!-- Name Field -->
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+          <input
+            id="name"
+            formControlName="name"
+            type="text"
+            placeholder="Enter receiver's name"
+            class="w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-gray-900 placeholder-gray-400"
+            [ngClass]="{
+              'border-red-500 focus:ring-red-500': receiverForm.get('name')?.invalid && receiverForm.get('name')?.touched
+            }"
+          >
+          <div *ngIf="receiverForm.get('name')?.invalid && receiverForm.get('name')?.touched" class="mt-2 text-sm text-red-600">
+            Name is required.
+          </div>
         </div>
-      </div>
 
+        <!-- Phone Number Field (Country Code + Number) -->
+        <div>
+          <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+          <div class="flex space-x-2">
+            <!-- Country Code Dropdown -->
+            <div class="relative w-32">
+              <select
+                id="countryCode"
+                formControlName="countryCode"
+                class="appearance-none w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-gray-900 bg-white"
+                [ngClass]="{
+                  'border-red-500 focus:ring-red-500': receiverForm.get('countryCode')?.invalid && receiverForm.get('countryCode')?.touched
+                }"
+                (change)="onCountryCodeChange($event)"
+              >
+                <option value="" disabled>Select Code</option>
+                <option *ngFor="let country of countries" [value]="country.dialCode">
+                  {{ country.flag }} {{ country.dialCode }}
+                </option>
+              </select>
+              <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </div>
+            <!-- Phone Number Input -->
+            <div class="flex-1 relative">
+              <input
+                id="phone"
+                formControlName="phone"
+                type="tel"
+                placeholder="Enter phone number"
+                class="w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-gray-900 placeholder-gray-400"
+                [ngClass]="{
+                  'border-red-500 focus:ring-red-500': receiverForm.get('phone')?.invalid && receiverForm.get('phone')?.touched
+                }"
+              >
+              <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+              </svg>
+            </div>
+          </div>
+          <div *ngIf="receiverForm.get('countryCode')?.invalid && receiverForm.get('countryCode')?.touched" class="mt-2 text-sm text-red-600">
+            Country code is required.
+          </div>
+          <div *ngIf="receiverForm.get('phone')?.invalid && receiverForm.get('phone')?.touched" class="mt-2 text-sm text-red-600">
+            <div *ngIf="receiverForm.get('phone')?.errors?.['required']">Phone number is required.</div>
+            <div *ngIf="receiverForm.get('phone')?.errors?.['pattern']">Please enter a valid phone number (e.g., 1234567890).</div>
+          </div>
+        </div>
 
-      <div class="flex justify-end space-x-3">
-        <button
-          type="button"
-          class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-5 py-2 rounded-xl shadow-sm hover:shadow-md transition-all duration-200"
-          (click)="cancel()"
-        >Cancel</button>
-        <button
-          type="button"
-          class="bg-primary hover:bg-primary-dark text-white px-5 py-2 rounded-xl shadow-sm hover:shadow-md transition-all duration-200"
-          (click)="onSubmit()"
-          [disabled]="receiverForm.invalid"
-        >Submit</button>
-      </div>
-    </form>
+        <!-- Form Actions -->
+        <div class="flex justify-end space-x-4 pt-4">
+          <button
+            type="button"
+            class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-200"
+            [routerLink]="['/dashboard']"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            [disabled]="receiverForm.invalid || isSubmitting"
+          >
+            <svg *ngIf="isSubmitting" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <svg *ngIf="!isSubmitting" class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            {{ isSubmitting ? 'Adding...' : 'Add Receiver' }}
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

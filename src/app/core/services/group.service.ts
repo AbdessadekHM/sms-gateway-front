@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Group } from '../../shared/models/Group';
+
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { Group } from '../models/Group';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +16,15 @@ export class GroupService {
   ];
   
 
-  constructor() { }
+  constructor(
+    private http: HttpClient
+  ) { }
 
-  addGroup(group: Group) {
-    this.groups.push(group);
+  fetchGroups():Observable<any>{
+    return this.http.get(environment.apiUrl + '/groups', {headers: {Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`}})
+  }
+  addGroup(group: any) {
+    return this.http.post(environment.apiUrl + '/groups', group, {headers: {Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`}})
   }
 
   removeGroup(name: string) {

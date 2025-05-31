@@ -1,98 +1,114 @@
 <div class="min-h-screen bg-gray-50">
-
-
+  <!-- Header Section -->
+  <div class="bg-white border-b border-gray-200">
+    <div class="container mx-auto px-4 py-6 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+          <p class="mt-1 text-sm text-gray-500">Manage your SMS campaigns and track performance</p>
+        </div>
+        <div class="flex items-center space-x-3">
+          <button class="inline-flex items-center px-4 py-2 bg-primary hover:bg-primary-dark text-white text-sm font-medium rounded-lg transition-colors">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            New SMS Campaign
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
-    <!-- Subnav -->
-    <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
-      <div class="relative w-full sm:w-auto">
-        <app-input
-          [type]="'text'"
-          [id]="'search'"
-          [placeholder]="'Search...'"
-          [isRequired]="false"
-          class="w-1/2"
-          
-        ></app-input>
-        <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7 7 0 1116.65 16.65z"></path>
-          </svg>
-        </span>
+    <div class="max-w-7xl mx-auto">
+      <!-- Overview Stats -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-500">Messages Sent (This Month)</p>
+              <p class="text-2xl font-bold text-primary">{{ dashboardStats.totalMessages || 0 }}</p>
+            </div>
+            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-500">Active Receivers</p>
+              <p class="text-2xl font-bold text-primary">{{ dashboardStats.totalReceivers || 0 }}</p>
+            </div>
+            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7a3 3 0 00-5.356 1.857M17 20c0-1.657 1.343-3 3-3h2M7 20c0-1.657-1.343-3-3-3H2m0 0v-2a3 3 0 013-3h14a3 3 0 013 3v2"/>
+            </svg>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-500">Groups</p>
+              <p class="text-2xl font-bold text-primary">{{ dashboardStats.totalGroups || 0 }}</p>
+            </div>
+            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-500">Delivery Rate</p>
+              <p class="text-2xl font-bold text-primary">{{ (dashboardStats.deliveryRate || 0) | percent }}</p>
+            </div>
+            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+        </div>
       </div>
-      <div class="flex space-x-3">
-        <app-primary-btn
-          [text]="'Add Group'"
-          routerLink="/add-group"
-          
-        ></app-primary-btn>
-        <app-primary-btn
-          [text]="'Add Receiver'"
-          routerLink="/add-receiver"
-          
-        ></app-primary-btn>
-      </div>
-    </div>
 
-    <!-- Tabs -->
-    <div class="mb-8">
-      <div class="border-b border-gray-200">
-        <nav class="flex space-x-8">
-          <button
-            class="relative pb-3 text-lg font-semibold transition-colors duration-200"
-            [ngClass]="{'text-primary border-b-4 border-primary': activeTab === 'users', 'text-gray-500 hover:text-primary': activeTab !== 'users'}"
-            (click)="activeTab = 'users'"
-          >Recievers</button>
-          <button
-            class="relative pb-3 text-lg font-semibold transition-colors duration-200"
-            [ngClass]="{'text-primary border-b-4 border-primary': activeTab === 'groups', 'text-gray-500 hover:text-primary': activeTab !== 'groups'}"
-            (click)="activeTab = 'groups'"
-          >Groups</button>
-        </nav>
+      <!-- Charts Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <!-- Message Volume Chart -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Message Volume (Last 30 Days)</h3>
+          <canvas id="messageVolumeChart" class="w-full h-64"></canvas>
+        </div>
+        <!-- Delivery Success Rate Chart -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Delivery Success Rate</h3>
+          <canvas id="deliveryRateChart" class="w-full h-64"></canvas>
+        </div>
       </div>
-    </div>
-    
-    <!-- Content -->
-    <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8" *ngIf="activeTab === 'users'">
-      <div class="overflow-x-auto">
-        <table class="w-full table-auto">
-          <thead>
-            <tr class="text-left text-gray-500 text-sm uppercase tracking-wide border-b">
-              <th class="py-4 px-2">Full Name</th>
-              <th class="py-4 px-2">Phone</th>
-              <th class="py-4 px-2">Created At</th>
-              <th class="py-4 px-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let user of renderedUsers; let i = index" class="border-b last:border-none hover:bg-gray-50 transition-colors duration-150">
-              <td class="py-4 px-2">{{ user.name }}</td>
-              <td class="py-4 px-2">{{ user.phoneNumber }}</td>
-              <td class="py-4 px-2">{{ user.createdAt }}</td>
-              <td class="py-4 px-2 space-x-2">
-                <button
-                  class="bg-accent hover:bg-primary-dark text-white px-4 py-1.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
-                  routerLink="/send-sms/receiver/{{ user.phoneNumber }}"
-                >SMS</button>
-                <button
-                  class="bg-accent hover:bg-primary-dark text-white px-4 py-1.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
-                  routerLink="/send-whatsapp/receiver/{{ user.phoneNumber }}"
-                  
-                >WhatsApp</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="flex justify-center mt-6">
-        <nav class="flex space-x-2">
-          <button
-            *ngFor="let page of indexes"
-            class="px-4 py-2 text-sm font-medium rounded-lg hover:bg-primary-light hover:text-primary transition-all duration-200"
-            (click)="onIndexChange(page)"
-            [ngClass]="{'bg-primary-light text-primary': page === index, 'text-gray-600': page !== index}"
-          >{{ page }}</button>
-        </nav>
+
+      <!-- Recent Activity -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-lg font-semibold text-gray-900">Recent Activity</h3>
+          <a href="#" class="text-sm text-primary hover:text-primary-dark">View All</a>
+        </div>
+        <div class="divide-y divide-gray-200">
+          <div *ngFor="let activity of recentActivities" class="py-4 flex items-center justify-between">
+            <div class="flex items-center">
+              <svg class="w-6 h-6 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+              <div>
+                <p class="text-sm font-medium text-gray-900">{{ activity.description }}</p>
+                <p class="text-xs text-gray-500">{{ activity.timestamp | date:'medium' }}</p>
+              </div>
+            </div>
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium"
+                  [ngClass]="{
+                    'bg-green-100 text-green-800': activity.status === 'success',
+                    'bg-red-100 text-red-800': activity.status === 'failed'
+                  }">
+              {{ activity.status | titlecase }}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ReceiverService } from '../../../core/services/receiver.service';
 import { Receiver } from '../../../core/models/Reciever';
+import { Group } from '../../../core/models/Group';
+import { GroupService } from '../../../core/services/group.service';
 
 
 @Component({
@@ -22,10 +24,11 @@ export class AddGroupComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private receiverService: ReceiverService
+    private receiverService: ReceiverService,
+    private groupService: GroupService 
   ) {
     this.groupForm = this.fb.group({
-      groupName: ['', Validators.required],
+      name: ['', Validators.required],
       description: [''],
       members: [[], Validators.required]
       
@@ -34,9 +37,16 @@ export class AddGroupComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.groupService.fetchGroups().subscribe(groups => {
+      console.log('Fetched groups:', groups);
+    }
+    );
     console.log('AddGroupComponent initialized');
     this.allMembers = this.receiverService.getReceivers();
     this.filteredMembers = [...this.allMembers]
+
+
     
 
   }
@@ -85,11 +95,23 @@ export class AddGroupComponent implements OnInit {
   onSubmit() {
     if (this.groupForm.valid) {
       const formValue = this.groupForm.value;
+      
+      const member_ids = this.groupForm.get('members')?.value.map((member: any) => member.id);
       const newGroup = {
         ...formValue,
-        createdAt: new Date().toISOString() 
+        receiverIds: member_ids,
+        userId: sessionStorage.getItem('userId')  
       };
+      delete newGroup.members;
       console.log('New Group:', newGroup);
+      this.groupService.addGroup(newGroup).subscribe(
+        (response) => {
+          console.log('Group added successfully:', response);
+        },
+        (error) => {
+          console.error('Error adding group:', error);
+        }
+      );
       
       this.groupForm.reset();
       this.selectedMembers = [];
