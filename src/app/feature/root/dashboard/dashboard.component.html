@@ -72,11 +72,11 @@
               <td class="py-4 px-2 space-x-2">
                 <button
                   class="bg-accent hover:bg-primary-dark text-white px-4 py-1.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
-                  routerLink="/send-sms/receiver/{{ user.id }}"
+                  routerLink="/send-sms/receiver/{{ user.phoneNumber }}"
                 >SMS</button>
                 <button
                   class="bg-accent hover:bg-primary-dark text-white px-4 py-1.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
-                  routerLink="/send-whatsapp/receiver/{{ user.id }}"
+                  routerLink="/send-whatsapp/receiver/{{ user.phoneNumber }}"
                   
                 >WhatsApp</button>
               </td>

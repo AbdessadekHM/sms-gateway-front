@@ -6,6 +6,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { Receiver } from '../../../core/models/Reciever';
 import { Group } from '../../../core/models/Group';
+import { SmsService } from '../../../core/services/sms.service';
+import { ReceiverService } from '../../../core/services/receiver.service';
 
 @Component({
   selector: 'app-send-sms',
@@ -23,10 +25,13 @@ export class SendSmsComponent implements OnInit{
 
    smsForm: FormGroup;
   
+   phoneNumber!: string;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
+    private smsService: SmsService,
+    private receiverService: ReceiverService
   ) {
     this.smsForm = this.fb.group({
       label: ['', Validators.required],
@@ -45,6 +50,10 @@ export class SendSmsComponent implements OnInit{
 
       this.selectedType = param.get('type') as unknown as string;
       this.selectedId = param.get('id') as unknown as number;
+      this.phoneNumber = param.get('id') as unknown as string;
+      console.log(this.selectedType, this.selectedId, this.phoneNumber);
+      
+      
       
     })
 
@@ -61,9 +70,16 @@ export class SendSmsComponent implements OnInit{
   onSubmit() {
     if (this.smsForm.valid) {
       const formValue = this.smsForm.value;
-      console.log('SMS Data:', formValue);
+      this.smsService.sendSms(formValue.label, this.phoneNumber, formValue.message).subscribe(
+        (response) => {
+          console.log('SMS sent successfully', response);
+          this.smsForm.reset();
+        },
+        (error) => {
+          console.error('Error sending SMS', error);
+        }
+      );
       
-      this.smsForm.reset();
     }
   }
 
