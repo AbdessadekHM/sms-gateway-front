@@ -31,6 +31,7 @@ export class DashboardComponent implements OnInit {
 
     this.recieverService.fetchReceivers().subscribe((data) => {
       this.mockUsers = data.content;
+      this.recieverService.setUsers(this.mockUsers);
       this.indexes = [...Array(Math.floor(this.mockUsers.length/8 + 1)).keys()].map(index=>index+1)
       
       this.renderedUsers = this.mockUsers.slice(0, 9 )

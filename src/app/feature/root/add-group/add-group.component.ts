@@ -16,6 +16,7 @@ export class AddGroupComponent implements OnInit {
   allMembers!: Receiver[];
   filteredMembers!: Receiver[];
   selectedMembers: any[] = [];
+  blurTimeout: any;
 
   isFocused = false;
 
@@ -36,21 +37,39 @@ export class AddGroupComponent implements OnInit {
     console.log('AddGroupComponent initialized');
     this.allMembers = this.receiverService.getReceivers();
     this.filteredMembers = [...this.allMembers]
+    
 
   }
 
   onFocus(){
     this.isFocused = true;
   }
-  onBlur(){
+  onBlur(event: Event){
+
+    this.blurTimeout = setTimeout(() => {
+    this.isFocused = false;
+    }, 200);
     this.isFocused = false;
   }
+  preventBlur(event: MouseEvent): void {
+    
+    event.preventDefault();
+    event.stopPropagation();
+    clearTimeout(this.blurTimeout);
+  }
+
+
+  isMemberSelected(member: any): boolean {
+    return this.selectedMembers.some(m => m.id === member.id);
+  }
+
 
   filterMembers(event: Event) {
     const searchTerm = (event.target as HTMLInputElement).value.toLowerCase();
     this.filteredMembers = this.allMembers.filter(member =>
       member.name.toLowerCase().includes(searchTerm)
     );
+    
   }
 
   toggleMember(event: Event, member: any) {

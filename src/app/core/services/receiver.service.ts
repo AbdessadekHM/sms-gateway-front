@@ -44,4 +44,7 @@ export class ReceiverService {
     
     return this.users;
   }
+  setUsers(users: Receiver[]) {
+    this.users = users;
+  }
 }
