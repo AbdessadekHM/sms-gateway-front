@@ -5,11 +5,12 @@ import { ReceiverService } from '../../../core/services/receiver.service';
 import { Receiver } from '../../../core/models/Reciever';
 import { Group } from '../../../core/models/Group';
 import { GroupService } from '../../../core/services/group.service';
+import { Router, RouterLink } from '@angular/router';
 
 
 @Component({
   selector: 'app-add-group',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './add-group.component.html',
   styleUrls: ['./add-group.component.css']
 })
@@ -20,12 +21,18 @@ export class AddGroupComponent implements OnInit {
   selectedMembers: any[] = [];
   blurTimeout: any;
 
+
+  isSubmitting = false;
   isFocused = false;
+  
+
+
 
   constructor(
     private fb: FormBuilder,
     private receiverService: ReceiverService,
-    private groupService: GroupService 
+    private groupService: GroupService,
+    private router: Router
   ) {
     this.groupForm = this.fb.group({
       name: ['', Validators.required],
@@ -35,6 +42,8 @@ export class AddGroupComponent implements OnInit {
     });
     
   }
+
+
 
   ngOnInit(): void {
 
@@ -94,6 +103,8 @@ export class AddGroupComponent implements OnInit {
 
   onSubmit() {
     if (this.groupForm.valid) {
+
+      this.isSubmitting = true;
       const formValue = this.groupForm.value;
       
       const member_ids = this.groupForm.get('members')?.value.map((member: any) => member.id);
@@ -107,6 +118,9 @@ export class AddGroupComponent implements OnInit {
       this.groupService.addGroup(newGroup).subscribe(
         (response) => {
           console.log('Group added successfully:', response);
+
+          this.isSubmitting = false;
+          this.router.navigate(['/dashboard']);
         },
         (error) => {
           console.error('Error adding group:', error);
@@ -123,7 +137,7 @@ export class AddGroupComponent implements OnInit {
     this.groupForm.reset();
     this.selectedMembers = [];
     this.filteredMembers = [...this.allMembers];
+    this.router.navigate(['/dashboard']);
     
-    console.log('Form cancelled');
   }
 }
