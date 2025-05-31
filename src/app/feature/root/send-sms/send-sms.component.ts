@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 import { Observable, switchMap } from 'rxjs';
 
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Receiver } from '../../../core/models/Reciever';
 import { Group } from '../../../core/models/Group';
 import { SmsService } from '../../../core/services/sms.service';
 import { ReceiverService } from '../../../core/services/receiver.service';
+import { GeminiService } from '../../../core/services/gemini.service';
 
 @Component({
   selector: 'app-send-sms',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, FormsModule],
   templateUrl: './send-sms.component.html',
   styleUrl: './send-sms.component.css'
 })
@@ -23,15 +24,24 @@ export class SendSmsComponent implements OnInit{
   selectedId!: number;
   
 
-   smsForm: FormGroup;
+  smsForm: FormGroup;
   
-   phoneNumber!: string;
+  phoneNumber!: string;
+
+
+  isSubmitting = false;
+  aiPrompt = '';
+  isGenerating = false;
+
+
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private smsService: SmsService,
-    private receiverService: ReceiverService
+    private receiverService: ReceiverService,
+    private router: Router,
+    private geminiService: GeminiService
   ) {
     this.smsForm = this.fb.group({
       label: ['', Validators.required],
@@ -86,7 +96,37 @@ export class SendSmsComponent implements OnInit{
   cancel() {
     this.smsForm.reset();
     
+    this.router.navigate(['/dashboard']);
     console.log('Form cancelled');
   }
+  
+  generateWithAI(): void {
+    if (this.aiPrompt && !this.isGenerating) {
+      this.isGenerating = true;
+      console.log('Generating SMS with AI for prompt:', this.aiPrompt);
+      const response = this.geminiService.generate(this.aiPrompt).then((generatedMessage) => {
+        
+        if (generatedMessage) {
+          this.smsForm.get('message')?.setValue(generatedMessage);
+          this.isGenerating = false;
+          this.aiPrompt = ''; // Clear the prompt after generation
+        } else {
+          console.error('AI generation failed or returned empty response');
+          this.isGenerating = false;
+        }
+      }).catch((error) => {
+        console.error('Error during AI generation:', error);
+        this.isGenerating = false;
+      });
+      
+      // setTimeout(() => {
+      //   const generatedMessage = `Generated SMS for: ${this.aiPrompt}`; // Replace with actual API call
+      //   this.smsForm.get('message')?.setValue(generatedMessage);
+      //   this.isGenerating = false;
+      //   this.aiPrompt = ''; // Clear the prompt after generation
+      // }, 1000);
+    }
+  }
+  
 
 }
