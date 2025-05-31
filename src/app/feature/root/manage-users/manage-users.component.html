@@ -8,17 +8,19 @@
           <p class="mt-1 text-sm text-gray-500">Manage your receivers and groups</p>
         </div>
         <div class="flex flex-col sm:flex-row gap-3">
-          <button 
+          <button
             class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
-            routerLink="/add-group">
+            routerLink="/add-group"
+          >
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
             </svg>
             Add Group
           </button>
-          <button 
+          <button
             class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
-            routerLink="/add-receiver">
+            routerLink="/add-receiver"
+          >
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
             </svg>
@@ -37,9 +39,10 @@
           <app-input
             [type]="'text'"
             [id]="'search'"
-            [placeholder]="'Search receivers...'"
+            [placeholder]="activeTab === 'users' ? 'Search receivers...' : 'Search groups...'"
             [isRequired]="false"
             class="w-full pl-10"
+            (input)="filterItems($event)"
           ></app-input>
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -47,28 +50,30 @@
             </svg>
           </div>
         </div>
-        
+
         <!-- Tab Navigation -->
         <div class="flex bg-gray-100 rounded-lg p-1">
           <button
             class="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200"
             [ngClass]="{'bg-white text-gray-900 shadow-sm': activeTab === 'users', 'text-gray-500 hover:text-gray-900': activeTab !== 'users'}"
-            (click)="activeTab = 'users'">
+            (click)="activeTab = 'users'; resetPagination()"
+          >
             Receivers
             <span class="ml-2 bg-gray-200 text-gray-600 py-0.5 px-2 rounded-full text-xs">{{ renderedUsers?.length || 0 }}</span>
           </button>
           <button
             class="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200"
             [ngClass]="{'bg-white text-gray-900 shadow-sm': activeTab === 'groups', 'text-gray-500 hover:text-gray-900': activeTab !== 'groups'}"
-            (click)="activeTab = 'groups'">
+            (click)="activeTab = 'groups'; resetPagination()"
+          >
             Groups
-            <span class="ml-2 bg-gray-200 text-gray-600 py-0.5 px-2 rounded-full text-xs">0</span>
+            <span class="ml-2 bg-gray-200 text-gray-600 py-0.5 px-2 rounded-full text-xs">{{ renderedGroups?.length || 0 }}</span>
           </button>
         </div>
       </div>
     </div>
-    
-    <!-- Content Card -->
+
+    <!-- Receivers Tab -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden" *ngIf="activeTab === 'users'">
       <!-- Table Header -->
       <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
@@ -79,11 +84,10 @@
           <div class="col-span-3 text-right">Actions</div>
         </div>
       </div>
-      
+
       <!-- Table Body -->
       <div class="divide-y divide-gray-200">
-        <div *ngFor="let user of renderedUsers; let i = index" 
-             class="px-6 py-4 hover:bg-gray-50 transition-colors duration-150">
+        <div *ngFor="let user of renderedUsers; let i = index" class="px-6 py-4 hover:bg-gray-50 transition-colors duration-150">
           <div class="grid grid-cols-12 gap-4 items-center">
             <!-- Name with Avatar -->
             <div class="col-span-3 flex items-center">
@@ -98,41 +102,35 @@
                 <div class="text-sm font-medium text-gray-900">{{ user.name || 'Unnamed' }}</div>
               </div>
             </div>
-            
+
             <!-- Phone -->
             <div class="col-span-3">
               <div class="text-sm text-gray-900 font-mono">{{ user.phoneNumber }}</div>
             </div>
-            
+
             <!-- Created Date -->
             <div class="col-span-3">
               <div class="text-sm text-gray-500">{{ user.createdAt | date:'MMM d, y' }}</div>
             </div>
-            
+
             <!-- Actions -->
             <div class="col-span-3 flex justify-end space-x-2">
               <button
                 class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
-                routerLink="/send-sms/receiver/{{ user.phoneNumber }}">
+                routerLink="/send-sms/receiver/{{ user.phoneNumber }}"
+              >
                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                 </svg>
                 SMS
               </button>
-              <button
-                class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
-                routerLink="/send-whatsapp/receiver/{{ user.phoneNumber }}">
-                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                </svg>
-                WhatsApp
-              </button>
+              
             </div>
           </div>
         </div>
       </div>
-      
-      <!-- Empty State -->
+
+      <!-- Empty State for Receivers -->
       <div *ngIf="!renderedUsers || renderedUsers.length === 0" class="text-center py-12">
         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
@@ -140,9 +138,10 @@
         <h3 class="mt-2 text-sm font-medium text-gray-900">No receivers found</h3>
         <p class="mt-1 text-sm text-gray-500">Get started by adding your first receiver.</p>
         <div class="mt-6">
-          <button 
+          <button
             routerLink="/add-receiver"
-            class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-dark transition-colors">
+            class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-dark transition-colors"
+          >
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
             </svg>
@@ -150,12 +149,12 @@
           </button>
         </div>
       </div>
-      
-      <!-- Pagination -->
+
+      <!-- Pagination for Receivers -->
       <div *ngIf="renderedUsers && renderedUsers.length > 0" class="px-6 py-4 border-t border-gray-200 bg-gray-50">
         <div class="flex items-center justify-between">
           <div class="text-sm text-gray-500">
-            <!-- Showing {{ ((index - 1) * 10) + 1 }} to {{ Math.min(index * 10, renderedUsers.length) }} of {{ renderedUsers.length }} results -->
+            Showing {{ ((index - 1) * pageSize) + 1 }} to {{ Math.min(index * pageSize, allUsers.length) }} of {{ allUsers.length }} results
           </div>
           <nav class="flex space-x-1">
             <button
@@ -163,9 +162,115 @@
               class="px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200"
               (click)="onIndexChange(page)"
               [ngClass]="{
-                'bg-primary text-white': page === index, 
+                'bg-primary text-white': page === index,
                 'text-gray-500 hover:text-gray-700 hover:bg-gray-100': page !== index
-              }">
+              }"
+            >
+              {{ page }}
+            </button>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <!-- Groups Tab -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden" *ngIf="activeTab === 'groups'">
+      <!-- Table Header -->
+      <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+        <div class="grid grid-cols-12 gap-4 text-xs font-medium text-gray-500 uppercase tracking-wide">
+          <div class="col-span-3">Group Name</div>
+          <div class="col-span-3">Description</div>
+          <div class="col-span-2">Members</div>
+          <div class="col-span-2">Created At</div>
+          <div class="col-span-2 text-right">Actions</div>
+        </div>
+      </div>
+
+      <!-- Table Body -->
+      <div class="divide-y divide-gray-200">
+        <div *ngFor="let group of renderedGroups" class="px-6 py-4 hover:bg-gray-50 transition-colors duration-150">
+          <div class="grid grid-cols-12 gap-4 items-center">
+            <!-- Group Name -->
+            <div class="col-span-3">
+              <div class="text-sm font-medium text-gray-900">{{ group.name }}</div>
+            </div>
+
+            <!-- Description -->
+            <div class="col-span-3">
+              <div class="text-sm text-gray-600">{{ group.description || 'No description' }}</div>
+            </div>
+
+            <!-- Member Count -->
+            <div class="col-span-2">
+              <div class="text-sm text-gray-600">{{ group.receiverIds.length }} member(s)</div>
+            </div>
+
+            <!-- Created Date -->
+            <div class="col-span-2">
+              <div class="text-sm text-gray-500">{{ group.createdAt | date:'MMM d, y' }}</div>
+            </div>
+
+            <!-- Actions -->
+            <div class="col-span-2 flex justify-end space-x-2">
+              <button
+                class="text-primary hover:text-primary-dark"
+                [routerLink]="['/groups/edit', group.id]"
+                title="Edit Group"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                </svg>
+              </button>
+              <button
+                class="text-red-600 hover:text-red-800"
+                (click)="deleteGroup(group.id)"
+                title="Delete Group"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State for Groups -->
+      <div *ngIf="!renderedGroups || renderedGroups.length === 0" class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">No groups found</h3>
+        <p class="mt-1 text-sm text-gray-500">Get started by adding your first group.</p>
+        <div class="mt-6">
+          <button
+            routerLink="/add-group"
+            class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-dark transition-colors"
+          >
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+            Add Group
+          </button>
+        </div>
+      </div>
+
+      <!-- Pagination for Groups -->
+      <div *ngIf="renderedGroups && renderedGroups.length > 0" class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+        <div class="flex items-center justify-between">
+          <div class="text-sm text-gray-500">
+            <!-- Showing {{ ((index - 1) * pageSize) + 1 }} to {{ Math.min(index * pageSize, allGroups.length) }} of {{ allGroups.length }} results -->
+          </div>
+          <nav class="flex space-x-1">
+            <button
+              *ngFor="let page of indexes"
+              class="px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200"
+              (click)="onIndexChange(page)"
+              [ngClass]="{
+                'bg-primary text-white': page === index,
+                'text-gray-500 hover:text-gray-700 hover:bg-gray-100': page !== index
+              }"
+            >
               {{ page }}
             </button>
           </nav>

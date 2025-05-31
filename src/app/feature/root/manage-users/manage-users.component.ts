@@ -14,60 +14,124 @@ import { GroupService } from '../../../core/services/group.service';
   templateUrl: './manage-users.component.html',
   
   standalone: true,
-  imports: [CommonModule, RouterLink, InputComponent, PrimaryBtnComponent]
+  imports: [CommonModule, RouterLink, InputComponent]
 })
 export class ManageUsersComponent implements OnInit {
-  activeTab = 'users';
+  Math = Math;
+  
+  activeTab: 'users' | 'groups' = 'users';
+  allUsers !:any[];
+  allGroups! :any[]; 
+    
+  renderedUsers: any[] = [];
+  renderedGroups: any[] = [];
+  index = 1;
+  pageSize = 10;
+  indexes: number[] = [];
 
-  mockUsers!: Receiver[];
-  mockGroups!: any;
-  indexes!: number[];
-
-  index: number = 1;
-  renderedUsers!: Receiver[];
-  renderedGroups!: any[];
-
-  isModalOpen = false;
 
   constructor(
     private recieverService: ReceiverService,
     private groupService: GroupService
   ){}
+  
+
+
+
   ngOnInit(): void {
     this.groupService.fetchGroups().subscribe((data) => {
-      this.mockGroups = data.content;
+      this.allGroups = data.content;
       // this.groupService.setGroups(this.mockGroups);
-      this.renderedGroups = this.mockGroups.slice(0, 8);
+      this.renderedGroups = this.allGroups.slice(0, 8);
+      console.log('Fetched groups:', this.allGroups);
+      console.log('Rendered groups:', this.renderedGroups);
       
     }, (error) => {
       console.error('Error fetching groups:', error);
     });
 
     this.recieverService.fetchReceivers().subscribe((data) => {
-      this.mockUsers = data.content;
-      this.recieverService.setUsers(this.mockUsers);
-      this.indexes = [...Array(Math.floor(this.mockUsers.length/8 + 1)).keys()].map(index=>index+1)
+      this.allUsers = data.content;
+      this.recieverService.setUsers(this.allUsers);
+      this.indexes = [...Array(Math.floor(this.allUsers.length/8 + 1)).keys()].map(index=>index+1)
       
-      this.renderedUsers = this.mockUsers.slice(0, 9 )
+      this.renderedUsers = this.allUsers.slice(0, 9 )
       
     }, (error) => {
       console.error('Error fetching receivers:', error);
     });
     
+    this.updateRenderedItems();
+    this.calculateIndexes();
 
 
   }
 
-  onIndexChange(page: number){
-    let start = 9*(page-1)
 
-    this.index = page
-    this.renderedUsers = this.mockUsers.slice(start ,start+8)
-
-
-
-
+  filterItems(event: Event): void {
+    const query = (event.target as HTMLInputElement).value.toLowerCase();
+    this.index = 1;
+    if (this.activeTab === 'users') {
+      this.renderedUsers = this.allUsers.filter(user =>
+        user.name.toLowerCase().includes(query) || user.phoneNumber.includes(query)
+      );
+    } else {
+      this.renderedGroups = this.allGroups.filter(group =>
+        group.name.toLowerCase().includes(query) ||
+        (group.description && group.description.toLowerCase().includes(query))
+      );
+    }
+    this.calculateIndexes();
   }
+
+  deleteGroup(groupId: number): void {
+    if (confirm('Are you sure you want to delete this group?')) {
+      this.allGroups = this.allGroups.filter(group => group.id !== groupId);
+      this.updateRenderedItems();
+      this.calculateIndexes();
+    }
+  }
+
+  onIndexChange(page: number): void {
+    this.index = page;
+    this.updateRenderedItems();
+  }
+
+  resetPagination(): void {
+    this.index = 1;
+    this.updateRenderedItems();
+    this.calculateIndexes();
+  }
+
+  private updateRenderedItems(): void {
+    const start = (this.index - 1) * this.pageSize;
+    const end = start + this.pageSize;
+    if (this.activeTab === 'users') {
+      this.renderedUsers = this.allUsers.slice(start, end);
+    } else {
+      this.renderedGroups = this.allGroups.slice(start, end);
+    }
+  }
+
+  private calculateIndexes(): void {
+    const totalItems = this.activeTab === 'users' ? this.allUsers.length : this.allGroups.length;
+    const totalPages = Math.ceil(totalItems / this.pageSize);
+    this.indexes = Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
+
+
+
+  mockUsers!: Receiver[];
+  mockGroups!: any;
+  
+
+
+
+  isModalOpen = false;
+  
+
+
   openModal() {
     console.log("Modal opened");
     this.isModalOpen = true;

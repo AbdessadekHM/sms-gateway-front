@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { InputComponent } from "../../../shared/components/input/input.component";
+import { CommonModule } from '@angular/common';
 
 // Interfaces
 interface UserProfile {
@@ -28,7 +29,7 @@ interface UpdateProfileResponse {
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  imports: [InputComponent, ReactiveFormsModule],
+  imports: [InputComponent, ReactiveFormsModule, CommonModule],
   
 })
 export class ProfileComponent implements OnInit, OnDestroy {
