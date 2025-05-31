@@ -9,12 +9,15 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { User } from '../../../core/models/user';
+import { Role } from '../../../core/models/roles';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-register',
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css',
+  
 })
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
@@ -23,7 +26,8 @@ export class RegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private auth: AuthService
   ) {}
 
   ngOnInit() {
@@ -74,7 +78,8 @@ export class RegisterComponent implements OnInit {
           }
         );
     } else {
-      this.markFormGroupTouched(this.registerForm);
+      this.isLoading = false;
+      
     }
   }
 

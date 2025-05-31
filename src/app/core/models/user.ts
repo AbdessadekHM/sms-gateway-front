@@ -1,10 +1,11 @@
 import {Role} from './roles';
 
 export interface User {
-  username?:any;
-  password?:any;
+  username:string;
+  password:string;
+  email:string;
   role?:Role;
-  firstName?:any;
-  lastName?:any;
-  phone?:any;
+  firstName:string;
+  lastName:string;
+  phone:string;
 }

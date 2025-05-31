@@ -2,7 +2,9 @@
 export interface Receiver{
     id: number,
     name: string,
-    phone: string,
-    createdat: string,
+    phoneNumber: string,
+    userId: String;
+    createdAt: string,
+    updatedAt: string,
 
 }

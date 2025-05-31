@@ -7,7 +7,7 @@ import { ReceiverService } from '../../../core/services/receiver.service';
   selector: 'app-add-receiver',
   templateUrl: './add-receiver.component.html',
   imports: [CommonModule, ReactiveFormsModule],
-  styleUrls: ['./add-receiver.component.css']
+  
 })
 export class AddReceiverComponent implements OnInit {
   receiverForm: FormGroup;
@@ -29,15 +29,24 @@ export class AddReceiverComponent implements OnInit {
       const formValue = this.receiverForm.value;
       const newReceiver = {
         ...formValue,
-        createdat: new Date().toISOString()
+        userId: sessionStorage.getItem('userId'), // Assuming userId is stored in sessionStorage
+        phoneNumber: formValue.phone,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
         };
+        delete newReceiver.phone;
         
-        this.receiverService.addReceiver(newReceiver);
-        console.log(this.receiverService.getReceivers());
+        this.receiverService.addReceiver(newReceiver).subscribe(
+          (response) => {
+            console.log('Receiver added successfully', response);
 
+            this.receiverForm.reset();
+          },
 
-      
-      this.receiverForm.reset();
+          (error) => {
+            console.log('Error adding receiver', error);
+          })
+
     }
   }
 

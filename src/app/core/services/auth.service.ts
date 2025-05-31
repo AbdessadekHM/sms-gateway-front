@@ -7,6 +7,7 @@ import {Observable} from 'rxjs';
 import { User } from '../models/user';
 import { AuthResponse } from '../models/AuthResponse';
 import { AuthenticatedLinks, Link, UnauthenticatedLinks } from '../models/NavLinks';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
@@ -14,7 +15,7 @@ import { AuthenticatedLinks, Link, UnauthenticatedLinks } from '../models/NavLin
 
 })
 export class AuthService  {
-  public  url="http://127.0.0.1:7001/"
+  
   public token:string | undefined="";
 
   public valid=false
@@ -27,6 +28,10 @@ export class AuthService  {
 
   private navBarLinks: Link[] = UnauthenticatedLinks;
 
+  private user: any;
+
+
+
 
 
 
@@ -35,15 +40,18 @@ export class AuthService  {
 
 
 
-  let endPoint="auth/login"
 
 
-    let req=this.http.post<AuthResponse>(this.url + endPoint,{ username, password})
+
+    this.http.post<AuthResponse>(environment.apiUrl + '/auth/login',{ username, password})
       .subscribe({next:e=> {
           this.token = e.token;
+          this.user= e.user;
+          console.log(e)
           if (this.token != "" && this.token != null) {
             sessionStorage.setItem("accessToken", <string>e.token)
-            // localStorage.setItem("accessToken", <string>e.token)
+            sessionStorage.setItem("userId", e.user.id)
+            
             console.log(e.token);
             this.isAuth = true;
             this.navBarLinks = AuthenticatedLinks;
@@ -53,16 +61,12 @@ export class AuthService  {
 
 
           error: e=>{   
-            console.log(e.error.message)
-            this.router.navigateByUrl('/register')
+            // console.log(e.error.message)
+            console.log("nothing")
+            // this.router.navigateByUrl('/register')
             
             console.log(e.error.message)
           }
-
-
-
-
-
 
 
       });
@@ -89,11 +93,15 @@ export class AuthService  {
   public  getProfile() {
   }
 
-  public  register() {
+  public  register(user: User) {
+    return this.http.post(environment.apiUrl + '/auth/logup', user)
 
   }
 
   get NavBarLinks(): Link[] {
     return this.navBarLinks;
+  }
+  getUser(){
+    return this.user;
   }
 }

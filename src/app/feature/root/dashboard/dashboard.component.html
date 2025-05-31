@@ -67,8 +67,8 @@
           <tbody>
             <tr *ngFor="let user of renderedUsers; let i = index" class="border-b last:border-none hover:bg-gray-50 transition-colors duration-150">
               <td class="py-4 px-2">{{ user.name }}</td>
-              <td class="py-4 px-2">{{ user.phone }}</td>
-              <td class="py-4 px-2">{{ user.createdat }}</td>
+              <td class="py-4 px-2">{{ user.phoneNumber }}</td>
+              <td class="py-4 px-2">{{ user.createdAt }}</td>
               <td class="py-4 px-2 space-x-2">
                 <button
                   class="bg-accent hover:bg-primary-dark text-white px-4 py-1.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200"

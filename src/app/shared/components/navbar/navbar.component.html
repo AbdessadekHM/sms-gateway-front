@@ -26,27 +26,6 @@
         >
        {{link.name}}
       </a>
-        <!-- Nav Links -->
-
-        <!-- <a
-          routerLink="/"
-
-          class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200"
-        >
-          Home
-        </a>
-        <a
-          href="#about"
-          class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer"
-        >
-          About Us
-        </a>
-        <a
-          href="#contact"
-          class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200"
-        >
-          Contact Us
-        </a> -->
 
         <!-- Auth Links -->
         <div class="flex items-center space-x-6">
@@ -60,7 +39,7 @@
               Login
             </a>
             <a
-              (click)="onRegister()"
+              routerLink="/register"
               class="bg-[var(--color-primary)] text-white px-8 py-2.5 rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors duration-200 font-medium cursor-pointer"
             >
               Register Now →
@@ -116,30 +95,15 @@
         >
        {{link.name}}
       </a>
-      <!-- <a
-        href="/"
-        class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)]"
-        >Home</a
-      >
-      <a
-        href="#about"
-        class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)]"
-        >About Us</a
-      >
-
-      <a
-        href="#contact"
-        class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)]"
-        >Contact Us</a
-      > -->
+      
       <div *ngIf="!authService.isAuthenticated()">
         <a
-          (click)="onLogin()"
+          routerLink="/login"
           class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)] cursor-pointer"
           >Login</a
         >
         <a
-          (click)="onRegister()"
+          routerLink="/register"
           class="block px-3 py-2.5 bg-[var(--color-primary)] text-white text-center rounded-lg hover:bg-[var(--color-primary-dark)]"
           >Register Now →</a
         >

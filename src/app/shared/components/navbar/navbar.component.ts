@@ -38,21 +38,13 @@ export class NavbarComponent implements OnInit {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 
-  async onLogin(): Promise<void> {
-    
-  }
+
 
   async onLogout(): Promise<void> {
     this.authService.logout();
   }
 
-  async onRegister(): Promise<void> {
-    try {
-      await this.authService.register();
-    } catch (error) {
-      console.error('Registration failed:', error);
-    }
-  }
+
 
 
 }
