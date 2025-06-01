@@ -10,6 +10,7 @@ import { SendWhatsappComponent } from './feature/root/send-whatsapp/send-whatsap
 import { authGuard } from './core/guards/auth.guard';
 import { ManageUsersComponent } from './feature/root/manage-users/manage-users.component';
 import { ProfileComponent } from './feature/root/profile/profile.component';
+import { ScheduleListComponent } from './feature/root/schedule-list/schedule-list.component';
 
 
 export const routes: Routes = [
@@ -21,6 +22,7 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
   { path: 'add-receiver', component: AddReceiverComponent, canActivate: [authGuard] },
   { path: 'add-group', component: AddGroupComponent, canActivate: [authGuard] },
+  { path: 'schedule', component: ScheduleListComponent, canActivate: [authGuard] },
   { path: 'send-sms/:type/:id', component: SendSmsComponent, canActivate: [authGuard] },
   { path: 'send-whatsapp/:type/:id', component: SendWhatsappComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '' },

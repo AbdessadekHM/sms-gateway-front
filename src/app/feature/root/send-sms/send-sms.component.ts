@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
-import { Observable, switchMap } from 'rxjs';
-
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Receiver } from '../../../core/models/Reciever';
 import { Group } from '../../../core/models/Group';
@@ -12,28 +10,21 @@ import { GeminiService } from '../../../core/services/gemini.service';
 
 @Component({
   selector: 'app-send-sms',
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink, FormsModule],
   templateUrl: './send-sms.component.html',
-  styleUrl: './send-sms.component.css'
+  styleUrls: ['./send-sms.component.css']
 })
-export class SendSmsComponent implements OnInit{
-
-  Ids!:Observable<Receiver | Group>[];
-
-  selectedType!: string ;
-  selectedId!: number;
-  
-
+export class SendSmsComponent implements OnInit {
   smsForm: FormGroup;
-  
-  phoneNumber!: string;
-
-
   isSubmitting = false;
   aiPrompt = '';
   isGenerating = false;
-
-
+  isScheduled = false;
+  minDateTime: string;
+  selectedType: string | null = null;
+  selectedId: number | null = null;
+  phoneNumber: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -43,90 +34,126 @@ export class SendSmsComponent implements OnInit{
     private router: Router,
     private geminiService: GeminiService
   ) {
+    // Set minimum date-time to current time + 5 minutes
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + 5);
+    this.minDateTime = now.toISOString().slice(0, 16); // Format: YYYY-MM-DDThh:mm
+
     this.smsForm = this.fb.group({
-      label: ['', Validators.required],
-      message: ['']
+      label: ['', [Validators.required, Validators.maxLength(50)]],
+      message: ['', [Validators.required, Validators.maxLength(160)]],
+      scheduledDateTime: ['']
+    }, { validators: this.scheduledDateValidator.bind(this) });
+  }
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      this.selectedType = params.get('type');
+      this.selectedId = params.get('id') ? Number(params.get('id')) : null;
+      this.phoneNumber = this.selectedType === 'receiver' ? params.get('id') : null;
+      console.log('Route Params:', { type: this.selectedType, id: this.selectedId, phoneNumber: this.phoneNumber });
     });
   }
 
-
-
-  ngOnInit(): void {
-    
-
-    this.selectedId = this.route.snapshot.paramMap.get('id') as unknown as number;
-    this.selectedType = this.route.snapshot.paramMap.get('type') as unknown as string;
-    this.route.paramMap.subscribe((param)=>{
-
-      this.selectedType = param.get('type') as unknown as string;
-      this.selectedId = param.get('id') as unknown as number;
-      this.phoneNumber = param.get('id') as unknown as string;
-      console.log(this.selectedType, this.selectedId, this.phoneNumber);
-      
-      
-      
-    })
-
-    console.log(this.selectedId, this.selectedType)
-
-    
-  }
-  
-
-
-
-
-
-  onSubmit() {
-    if (this.smsForm.valid) {
-      const formValue = this.smsForm.value;
-      this.smsService.sendSms(formValue.label, this.phoneNumber, formValue.message).subscribe(
-        (response) => {
-          console.log('SMS sent successfully', response);
-          this.smsForm.reset();
-        },
-        (error) => {
-          console.error('Error sending SMS', error);
-        }
-      );
-      
+  toggleSchedule(): void {
+    this.isScheduled = !this.isScheduled;
+    const scheduledControl = this.smsForm.get('scheduledDateTime');
+    if (this.isScheduled) {
+      scheduledControl?.setValidators([Validators.required, this.futureDateValidator()]);
+      const now = new Date();
+      now.setMinutes(now.getMinutes() + 5);
+      scheduledControl?.setValue(now.toISOString().slice(0, 16));
+    } else {
+      scheduledControl?.clearValidators();
+      scheduledControl?.setValue('');
     }
+    scheduledControl?.updateValueAndValidity();
   }
 
-  cancel() {
-    this.smsForm.reset();
-    
-    this.router.navigate(['/dashboard']);
-    console.log('Form cancelled');
-  }
-  
   generateWithAI(): void {
     if (this.aiPrompt && !this.isGenerating) {
       this.isGenerating = true;
-      console.log('Generating SMS with AI for prompt:', this.aiPrompt);
-      const response = this.geminiService.generate(this.aiPrompt).then((generatedMessage) => {
-        
+      this.geminiService.generate(this.aiPrompt).then(generatedMessage => {
         if (generatedMessage) {
           this.smsForm.get('message')?.setValue(generatedMessage);
-          this.isGenerating = false;
-          this.aiPrompt = ''; // Clear the prompt after generation
+          this.aiPrompt = '';
         } else {
-          console.error('AI generation failed or returned empty response');
-          this.isGenerating = false;
+          console.error('AI generation returned empty response');
         }
-      }).catch((error) => {
+        this.isGenerating = false;
+      }).catch(error => {
         console.error('Error during AI generation:', error);
         this.isGenerating = false;
       });
-      
-      // setTimeout(() => {
-      //   const generatedMessage = `Generated SMS for: ${this.aiPrompt}`; // Replace with actual API call
-      //   this.smsForm.get('message')?.setValue(generatedMessage);
-      //   this.isGenerating = false;
-      //   this.aiPrompt = ''; // Clear the prompt after generation
-      // }, 1000);
     }
   }
-  
 
+  onSubmit(): void {
+    if (this.smsForm.valid && !this.isSubmitting) {
+      this.isSubmitting = true;
+      const formValue = this.smsForm.value;
+      const payload = {
+        label: formValue.label,
+        message: formValue.message,
+        scheduledDateTime: this.isScheduled && formValue.scheduledDateTime
+          ? new Date(formValue.scheduledDateTime).toISOString()
+          : null
+      };
+
+      console.log('SMS Payload:', payload);
+      console.log('Chosen Date:', payload.scheduledDateTime || 'Immediate');
+      console.log(formValue.scheduledDateTime);
+
+      const smsObservable = this.isScheduled
+        ? this.smsService.scheduleSms(
+            formValue.label,
+            this.phoneNumber || '',
+            formValue.message,
+            payload.scheduledDateTime!
+          )
+        : this.smsService.sendSms(
+            formValue.label,
+            this.phoneNumber || '',
+            formValue.message
+          );
+
+      smsObservable.subscribe({
+        next: response => {
+          console.log(this.isScheduled ? 'SMS scheduled successfully' : 'SMS sent successfully', response);
+          this.smsForm.reset();
+          this.isSubmitting = false;
+          this.isScheduled = false;
+          this.router.navigate(['/dashboard']);
+        },
+        error: error => {
+          console.error(this.isScheduled ? 'Error scheduling SMS' : 'Error sending SMS', error);
+          this.isSubmitting = false;
+        }
+      });
+    }
+  }
+
+  cancel(): void {
+    this.smsForm.reset();
+    this.isScheduled = false;
+    this.router.navigate(['/dashboard']);
+  }
+
+  private futureDateValidator() {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) return null;
+      const selectedDate = new Date(control.value);
+      const now = new Date();
+      now.setMinutes(now.getMinutes() + 5);
+      return selectedDate >= now ? null : { futureDate: true };
+    };
+  }
+
+  private scheduledDateValidator(group: FormGroup): ValidationErrors | null {
+    const scheduledDateTime = group.get('scheduledDateTime')?.value;
+    if (this.isScheduled && !scheduledDateTime) {
+      return { requiredScheduledDate: true };
+    }
+    return null;
+  }
 }
