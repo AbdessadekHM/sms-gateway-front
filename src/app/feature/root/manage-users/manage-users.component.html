@@ -59,7 +59,7 @@
             (click)="activeTab = 'users'; resetPagination()"
           >
             Receivers
-            <span class="ml-2 bg-gray-200 text-gray-600 py-0.5 px-2 rounded-full text-xs">{{ renderedUsers?.length || 0 }}</span>
+            <span class="ml-2 bg-gray-200 text-gray-600 py-0.5 px-2 rounded-full text-xs">{{ renderedUsers.length || 0 }}</span>
           </button>
           <button
             class="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200"
@@ -67,7 +67,7 @@
             (click)="activeTab = 'groups'; resetPagination()"
           >
             Groups
-            <span class="ml-2 bg-gray-200 text-gray-600 py-0.5 px-2 rounded-full text-xs">{{ renderedGroups?.length || 0 }}</span>
+            <span class="ml-2 bg-gray-200 text-gray-600 py-0.5 px-2 rounded-full text-xs">{{ renderedGroups.length || 0 }}</span>
           </button>
         </div>
       </div>
