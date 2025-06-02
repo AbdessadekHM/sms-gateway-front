@@ -47,4 +47,7 @@ export class ReceiverService {
   setUsers(users: Receiver[]) {
     this.users = users;
   }
+  getReceiverById(id: number){
+    return this.users.find(user => user.id === id);
+  }
 }

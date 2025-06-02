@@ -1,0 +1,196 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header Section -->
+  <div class="bg-white border-b border-gray-200">
+    <div class="container mx-auto px-4 py-6 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Profile Settings</h1>
+          <p class="mt-1 text-sm text-gray-500">Manage your account information and preferences</p>
+        </div>
+        <div class="flex items-center space-x-3">
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            Account Active
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Profile Sidebar -->
+        <div class="lg:col-span-1">
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <!-- Profile Picture -->
+            <div class="flex flex-col items-center text-center">
+              <div class="relative">
+                <img
+                  [src]="getAvatarUrl()"
+                  alt="User avatar"
+                  class="h-24 w-24 rounded-full object-cover shadow-lg"
+                  [ngClass]="{'bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center': !userProfile.email}"
+                >
+                <span *ngIf="!userProfile.email" class="text-2xl font-bold text-white">{{ userProfile.firstName?.charAt(0)?.toUpperCase() || 'U' }}</span>
+              </div>
+              <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ (userProfile.firstName + ' ' + userProfile.lastName) || 'User Name' }}</h3>
+              <p class="text-sm text-gray-500">{{ userProfile.email || 'user@example.com' }}</p>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="mt-6 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h4 class="text-sm font-semibold text-gray-900 mb-4">Quick Actions</h4>
+            <div class="space-y-3">
+              <button class="w-full flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+                Change Password
+              </button>
+              <button class="w-full flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Download Data
+              </button>
+              <button class="w-full flex items-center px-3 py-2 text-sm text-red-700 hover:bg-red-50 rounded-lg transition-colors">
+                <svg class="w-4 h-4 mr-3 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+                Delete Account
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Profile Form -->
+        <div class="lg:col-span-2">
+          <form [formGroup]="profileForm" (ngSubmit)="onUpdateProfile()">
+            <!-- Personal Information -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+              <div class="flex items-center justify-between mb-6">
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900">Personal Information</h3>
+                  <p class="text-sm text-gray-500">Update your personal details here</p>
+                </div>
+                <div *ngIf="hasUnsavedChanges" class="flex items-center text-sm text-amber-600">
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                  </svg>
+                  Unsaved changes
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- First Name -->
+                <div>
+                  <label for="firstName" class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                  <app-input
+                    [type]="'text'"
+                    [id]="'firstName'"
+                    [placeholder]="'Enter your first name'"
+                    [isRequired]="true"
+                    formControlName="firstName"
+                    class="w-full"
+                  ></app-input>
+                  <div *ngIf="profileForm.get('firstName')?.errors?.['required'] && profileForm.get('firstName')?.touched" 
+                       class="mt-1 text-sm text-red-600">
+                    First name is required
+                  </div>
+                </div>
+
+                <!-- Last Name -->
+                <div>
+                  <label for="lastName" class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                  <app-input
+                    [type]="'text'"
+                    [id]="'lastName'"
+                    [placeholder]="'Enter your last name'"
+                    [isRequired]="true"
+                    formControlName="lastName"
+                    class="w-full"
+                  ></app-input>
+                  <div *ngIf="profileForm.get('lastName')?.errors?.['required'] && profileForm.get('lastName')?.touched" 
+                       class="mt-1 text-sm text-red-600">
+                    Last name is required
+                  </div>
+                </div>
+
+                <!-- Email -->
+                <div>
+                  <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                  <app-input
+                    [type]="'email'"
+                    [id]="'email'"
+                    [placeholder]="'Enter your email'"
+                    [isRequired]="true"
+                    formControlName="email"
+                    class="w-full"
+                  ></app-input>
+                  <div *ngIf="profileForm.get('email')?.errors?.['required'] && profileForm.get('email')?.touched" 
+                       class="mt-1 text-sm text-red-600">
+                    Email is required
+                  </div>
+                  <div *ngIf="profileForm.get('email')?.errors?.['email'] && profileForm.get('email')?.touched" 
+                       class="mt-1 text-sm text-red-600">
+                    Please enter a valid email
+                  </div>
+                </div>
+
+                <!-- Phone -->
+                <div>
+                  <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                  <app-input
+                    [type]="'text'"
+                    [id]="'phone'"
+                    [placeholder]="'Enter your phone number'"
+                    [isRequired]="false"
+                    formControlName="phone"
+                    class="w-full"
+                  ></app-input>
+                  <div *ngIf="profileForm.get('phone')?.errors?.['pattern'] && profileForm.get('phone')?.touched" 
+                       class="mt-1 text-sm text-red-600">
+                    Please enter a valid phone number
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 sm:justify-end">
+              <button
+                type="button"
+                (click)="onResetForm()"
+                class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
+                [disabled]="!hasUnsavedChanges"
+              >
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+                Reset Changes
+              </button>
+              <button
+                type="submit"
+                class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                [disabled]="profileForm.invalid || isUpdating"
+              >
+                <svg *ngIf="isUpdating" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <svg *ngIf="!isUpdating" class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                {{ isUpdating ? 'Updating...' : 'Update Profile' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

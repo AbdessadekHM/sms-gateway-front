@@ -2,7 +2,7 @@ import { Receiver } from "./Reciever";
 
 
 export interface Group {
-    id: string;
+    id: number;
     name: string;
     description: string;
     members: Receiver[] | null;

@@ -1,59 +1,70 @@
-<nav class="bg-white shadow-sm">
-  <div class="container-custom px-6 lg:px-8">
-    <div class="flex items-center justify-between h-20">
+<nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
       <!-- Logo -->
       <div class="flex-shrink-0">
         <a href="/" class="flex items-center">
           <img
             src="/images/sms-high-resolution-logo.png"
             alt="SMS Gateway"
-            class="h-9 w-auto"
+            class="h-8 w-auto"
           />
         </a>
       </div>
 
-      <!-- Navigation Links and Auth Buttons -->
-      <div class="hidden md:flex items-center space-x-10">
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-8">
+        <div class="flex items-center space-x-1">
+          <a
+            *ngFor="let link of authService.NavBarLinks"
+            routerLink="{{ link.url }}"
+            routerLinkActive="text-primary border-b-2 border-primary"
+            class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 border-b-2 border-transparent transition-all duration-200 cursor-pointer"
+          >
+            {{ link.name }}
+          </a>
+        </div>
+      </div>
 
-        <a
-          *ngFor="let link of authService.NavBarLinks"
-
-
-          routerLink="{{ link.url }}"
-
-
-          class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer"
-        >
-       {{link.name}}
-      </a>
-
-        <!-- Auth Links -->
-        <div class="flex items-center space-x-6">
-
-
-          <div *ngIf="!authService.isAuthenticated()">
-            <a
-              routerLink="/login"
-              class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer"
-            >
-              Login
-            </a>
-            <a
-              routerLink="/register"
-              class="bg-[var(--color-primary)] text-white px-8 py-2.5 rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors duration-200 font-medium cursor-pointer"
-            >
-              Register Now →
-            </a>
+      <!-- Desktop Auth Section -->
+      <div class="hidden md:flex items-center space-x-4">
+        <div *ngIf="!authService.isAuthenticated()" class="flex items-center space-x-3">
+          <a
+            routerLink="/login"
+            class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer"
+          >
+            Sign in
+          </a>
+          <a
+            routerLink="/register"
+            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200 cursor-pointer"
+          >
+            Get Started
+            <svg class="ml-2 -mr-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
+          </a>
+        </div>
+        
+        <!-- User Menu (when authenticated) -->
+        <div *ngIf="authService.isAuthenticated()" class="relative">
+          <div class="flex items-center space-x-3">
+            <!-- User Avatar/Menu -->
+            <div class="flex items-center space-x-3">
+              <div class="h-8 w-8 rounded-full bg-primary-light flex items-center justify-center">
+                <span class="text-sm font-medium text-primary">U</span>
+              </div>
+              <button
+                (click)="onLogout()"
+                class="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200"
+              >
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                Sign out
+              </button>
+            </div>
           </div>
-
-            <a
-              *ngIf="authService.isAuthenticated()"
-              (click)="onLogout()"
-              class="bg-[var(--color-primary)] text-white px-8 py-2.5 rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors duration-200 font-medium cursor-pointer"
-            >
-              Logout
-            </a>
-          
         </div>
       </div>
 
@@ -62,20 +73,26 @@
         <button
           type="button"
           (click)="toggleMobileMenu()"
-          class="text-[var(--color-text)] hover:text-[var(--color-primary)]"
+          class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary transition-colors duration-200"
         >
+          <span class="sr-only">Open main menu</span>
           <svg
             class="h-6 w-6"
+            [class.hidden]="isMobileMenuOpen"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 6h16M4 12h16M4 18h16"
-            />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg
+            class="h-6 w-6"
+            [class.hidden]="!isMobileMenuOpen"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
@@ -84,36 +101,48 @@
 
   <!-- Mobile menu -->
   <div class="md:hidden" [class.hidden]="!isMobileMenuOpen">
-    <div class="px-6 pt-2 pb-3 space-y-1">
-
-        <a
-          *ngFor="let link of authService.NavBarLinks"
-
-
-          routerLink="{{link.url}}"
-          class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)]"
-        >
-       {{link.name}}
+    <div class="px-4 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
+      <a
+        *ngFor="let link of authService.NavBarLinks"
+        routerLink="{{ link.url }}"
+        routerLinkActive="bg-primary-light text-primary border-l-4 border-primary"
+        class="block px-3 py-3 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md border-l-4 border-transparent transition-all duration-200"
+        (click)="toggleMobileMenu()"
+      >
+        {{ link.name }}
       </a>
       
-      <div *ngIf="!authService.isAuthenticated()">
-        <a
-          routerLink="/login"
-          class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)] cursor-pointer"
-          >Login</a
-        >
-        <a
-          routerLink="/register"
-          class="block px-3 py-2.5 bg-[var(--color-primary)] text-white text-center rounded-lg hover:bg-[var(--color-primary-dark)]"
-          >Register Now →</a
-        >
+      <!-- Mobile Auth -->
+      <div class="pt-4 border-t border-gray-200">
+        <div *ngIf="!authService.isAuthenticated()" class="space-y-2">
+          <a
+            routerLink="/login"
+            class="block px-3 py-3 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors duration-200"
+            (click)="toggleMobileMenu()"
+          >
+            Sign in
+          </a>
+          <a
+            routerLink="/register"
+            class="block px-3 py-3 text-base font-medium text-white bg-primary hover:bg-primary-dark rounded-md text-center transition-colors duration-200"
+            (click)="toggleMobileMenu()"
+          >
+            Get Started →
+          </a>
+        </div>
+        
+        <div *ngIf="authService.isAuthenticated()">
+          <button
+            (click)="onLogout(); toggleMobileMenu()"
+            class="flex items-center w-full px-3 py-3 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors duration-200"
+          >
+            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+            Sign out
+          </button>
+        </div>
       </div>
-      <a
-        *ngIf="authService.isAuthenticated()"
-        (click)="onLogout()"
-        class="block px-3 py-2.5 text-[var(--color-text)] hover:text-[var(--color-primary)] cursor-pointer"
-        >Logout</a
-      >
     </div>
   </div>
 </nav>
