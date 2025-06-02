@@ -17,4 +17,5 @@ export const AuthenticatedLinks: Link[] = [
     { name: 'Manage Users', url: '/manage-users', isHref: false },
     { name: 'Profile', url: '/profile', isHref: false },
     { name: 'Schedule', url: '/schedule', isHref: false },
+    { name: 'history', url: '/history', isHref: false },
 ]
