@@ -3,21 +3,16 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Subject, takeUntil } from 'rxjs';
 import { InputComponent } from "../../../shared/components/input/input.component";
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../core/services/auth.service';
 
 // Interfaces
 interface UserProfile {
-  id?: string;
-  name: string;
+  id?: number;
+  firstName: string;
+  lastName: string;
   email: string;
   phone?: string;
-  company?: string;
-  bio?: string;
-  createdAt: string;
-  totalMessages: number;
-  totalReceivers: number;
-  emailNotifications: boolean;
-  smsNotifications: boolean;
-  timezone: string;
+  
 }
 
 interface UpdateProfileResponse {
@@ -37,17 +32,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
   
   profileForm: FormGroup;
   userProfile: UserProfile = {
-    name: '',
+    id: 0,
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
-    company: '',
-    bio: '',
-    createdAt: '',
-    totalMessages: 0,
-    totalReceivers: 0,
-    emailNotifications: true,
-    smsNotifications: false,
-    timezone: 'UTC'
+    
   };
   
   isUpdating = false;
@@ -56,6 +46,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
+    private authService: AuthService
     // Inject your services here
     // private userService: UserService,
     // private notificationService: NotificationService
@@ -66,6 +57,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadUserProfile();
     this.setupFormChangeListener();
+    console.log(this.authService.getUser())
   }
 
   ngOnDestroy(): void {
@@ -75,14 +67,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   private createForm(): FormGroup {
     return this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
-      phone: [''],
-      company: [''],
-      bio: ['', [Validators.maxLength(500)]],
-      emailNotifications: [true],
-      smsNotifications: [false],
-      timezone: ['UTC']
+      id: [this.authService.getUser().id, []],
+      firstName: [this.authService.getUser().firstName || '', [Validators.required, Validators.minLength(2)]],
+      lastName: [this.authService.getUser().lastName || '', [Validators.required, Validators.minLength(2)]],
+      email: [this.authService.getUser().email || '', [Validators.required, Validators.email]],
+      phone: [this.authService.getUser().phone],
+      
+      
     });
   }
 
@@ -115,36 +106,29 @@ export class ProfileComponent implements OnInit, OnDestroy {
     //     }
     //   });
 
+    this.userProfile = this.authService.getUser()
     // Mock data for demonstration
-    setTimeout(() => {
-      this.userProfile = {
-        id: '1',
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-        phone: '+1 (555) 123-4567',
-        company: 'Acme Corp',
-        bio: 'Software developer with 5+ years of experience in web development.',
-        createdAt: 'January 2023',
-        totalMessages: 1247,
-        totalReceivers: 89,
-        emailNotifications: true,
-        smsNotifications: false,
-        timezone: 'EST'
-      };
-      this.populateForm(this.userProfile);
-    }, 1000);
+    // setTimeout(() => {
+    //   this.userProfile = {
+    //     id: 1,
+    //     firstName: 'John',
+    //     lastName: 'Doe',
+    //     email: 'john.doe@example.com',
+    //     phone: '+1 (555) 123-4567',
+        
+    //   };
+    //   this.populateForm(this.userProfile);
+    // }, 1000);
   }
 
   private populateForm(profile: UserProfile): void {
     this.profileForm.patchValue({
-      name: profile.name,
+      id: profile.id,
+      firstName: profile.firstName,
+      lastName: profile.lastName,
       email: profile.email,
       phone: profile.phone || '',
-      company: profile.company || '',
-      bio: profile.bio || '',
-      emailNotifications: profile.emailNotifications,
-      smsNotifications: profile.smsNotifications,
-      timezone: profile.timezone
+      
     });
     
     // Store original values for change detection
@@ -327,4 +311,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
   getBioCharacterCount(): number {
     return this.bioControl?.value?.length || 0;
   }
+
+  getAvatarUrl(): string {
+  if (!this.userProfile.email) {
+    return ''; // Fallback to initial-based avatar
+  }
+  // Use DiceBear API with email as seed and 'adventurer' style
+  return `https://api.dicebear.com/9.x/adventurer/svg?seed=${encodeURIComponent(this.userProfile.email)}`;
+  }
+  
+   
 }
