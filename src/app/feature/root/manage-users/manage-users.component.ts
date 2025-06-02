@@ -41,7 +41,7 @@ export class ManageUsersComponent implements OnInit {
   ngOnInit(): void {
     this.groupService.fetchGroups().subscribe((data) => {
       this.allGroups = data.content;
-      // this.groupService.setGroups(this.mockGroups);
+      this.groupService.setGroups(this.allGroups);
       this.renderedGroups = this.allGroups.slice(0, 8);
       console.log('Fetched groups:', this.allGroups);
       console.log('Rendered groups:', this.renderedGroups);

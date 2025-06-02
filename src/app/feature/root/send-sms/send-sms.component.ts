@@ -7,6 +7,7 @@ import { Group } from '../../../core/models/Group';
 import { SmsService } from '../../../core/services/sms.service';
 import { ReceiverService } from '../../../core/services/receiver.service';
 import { GeminiService } from '../../../core/services/gemini.service';
+import { GroupService } from '../../../core/services/group.service';
 
 @Component({
   selector: 'app-send-sms',
@@ -32,7 +33,8 @@ export class SendSmsComponent implements OnInit {
     private smsService: SmsService,
     private receiverService: ReceiverService,
     private router: Router,
-    private geminiService: GeminiService
+    private geminiService: GeminiService,
+    private groupService: GroupService
   ) {
     // Set minimum date-time to current time + 5 minutes
     const now = new Date();
@@ -90,47 +92,114 @@ export class SendSmsComponent implements OnInit {
 
   onSubmit(): void {
     if (this.smsForm.valid && !this.isSubmitting) {
-      this.isSubmitting = true;
-      const formValue = this.smsForm.value;
-      const payload = {
-        label: formValue.label,
-        message: formValue.message,
-        scheduledDateTime: this.isScheduled && formValue.scheduledDateTime
-          ? new Date(formValue.scheduledDateTime).toISOString()
-          : null
-      };
-
-      console.log('SMS Payload:', payload);
-      console.log('Chosen Date:', payload.scheduledDateTime || 'Immediate');
-      console.log(formValue.scheduledDateTime);
-
-      const smsObservable = this.isScheduled
-        ? this.smsService.scheduleSms(
-            formValue.label,
-            this.phoneNumber || '',
-            formValue.message,
-            payload.scheduledDateTime!
-          )
-        : this.smsService.sendSms(
-            formValue.label,
-            this.phoneNumber || '',
-            formValue.message
-          );
-
-      smsObservable.subscribe({
-        next: response => {
-          console.log(this.isScheduled ? 'SMS scheduled successfully' : 'SMS sent successfully', response);
-          this.smsForm.reset();
-          this.isSubmitting = false;
-          this.isScheduled = false;
-          this.router.navigate(['/dashboard']);
-        },
-        error: error => {
-          console.error(this.isScheduled ? 'Error scheduling SMS' : 'Error sending SMS', error);
-          this.isSubmitting = false;
-        }
-      });
+      if (this.selectedType === 'receiver' ) {
+        this.onReceiverSubmit();
+      }
+      else if (this.selectedType === 'group') {
+        this.onGroupSubmit();
+      } else {
+        console.error('Invalid type selected:', this.selectedType);
+      }
+      
+      
     }
+  }
+  onGroupSubmit() {
+    this.isSubmitting = true;
+    const formValue = this.smsForm.value;
+    const payload = {
+      label: formValue.label,
+      message: formValue.message,
+      scheduledDateTime: this.isScheduled && formValue.scheduledDateTime
+        ? new Date(formValue.scheduledDateTime).toISOString()
+        : null
+    };
+
+    console.log('SMS Payload:', payload);
+    console.log('Chosen Date:', payload.scheduledDateTime || 'Immediate');
+    console.log(formValue.scheduledDateTime);
+
+    const smsObservable = this.isScheduled
+      ? this.groupService.scheduleSms(
+        
+          this.selectedId!,
+          formValue.message,
+          formValue.label,
+          payload.scheduledDateTime!
+        )
+      : this.groupService.sendGroupSms(
+          this.selectedId!,
+          formValue.message,
+          formValue.label
+        );
+    // const smsObservable = this.groupService.sendGroupSms(
+    //   this.selectedId!,
+    //   formValue.message,
+    //   formValue.label
+    // )
+    if(!smsObservable) {
+      return;
+    }
+
+
+    smsObservable.subscribe({
+      next: response => {
+        console.log(this.isScheduled ? 'SMS scheduled successfully' : 'SMS sent successfully', response);
+        this.smsForm.reset();
+        this.isSubmitting = false;
+        this.isScheduled = false;
+        this.router.navigate(['/dashboard']);
+      },
+      error: error => {
+        console.error(this.isScheduled ? 'Error scheduling SMS' : 'Error sending SMS', error);
+        this.isSubmitting = false;
+      }
+    });
+  }
+
+
+  onReceiverSubmit(){
+
+    this.isSubmitting = true;
+    const formValue = this.smsForm.value;
+    const payload = {
+      label: formValue.label,
+      message: formValue.message,
+      scheduledDateTime: this.isScheduled && formValue.scheduledDateTime
+        ? new Date(formValue.scheduledDateTime).toISOString()
+        : null
+    };
+
+    console.log('SMS Payload:', payload);
+    console.log('Chosen Date:', payload.scheduledDateTime || 'Immediate');
+    console.log(formValue.scheduledDateTime);
+
+    const smsObservable = this.isScheduled
+      ? this.smsService.scheduleSms(
+          formValue.label,
+          this.phoneNumber || '',
+          formValue.message,
+          payload.scheduledDateTime!
+        )
+      : this.smsService.sendSms(
+          formValue.label,
+          this.phoneNumber || '',
+          formValue.message
+        );
+
+    smsObservable.subscribe({
+      next: response => {
+        console.log(this.isScheduled ? 'SMS scheduled successfully' : 'SMS sent successfully', response);
+        this.smsForm.reset();
+        this.isSubmitting = false;
+        this.isScheduled = false;
+        this.router.navigate(['/dashboard']);
+      },
+      error: error => {
+        console.error(this.isScheduled ? 'Error scheduling SMS' : 'Error sending SMS', error);
+        this.isSubmitting = false;
+      }
+    });
   }
 
   cancel(): void {

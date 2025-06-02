@@ -43,6 +43,10 @@ export class SmsService {
     }
     return this.http.delete(environment.apiUrl + "/schedule/" + id ,  {headers: {Authorization: "Bearer " + sessionStorage.getItem("accessToken") }});
   }
+
+  getHistory(){
+    return this.http.get(environment.apiUrl + "/sendmsg/history", {headers: {Authorization: "Bearer " + sessionStorage.getItem("accessToken") }});
+  }
 }
 
 
