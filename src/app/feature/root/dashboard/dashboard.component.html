@@ -8,7 +8,10 @@
           <p class="mt-1 text-sm text-gray-500">Manage your SMS campaigns and track performance</p>
         </div>
         <div class="flex items-center space-x-3">
-          <button class="inline-flex items-center px-4 py-2 bg-primary hover:bg-primary-dark text-white text-sm font-medium rounded-lg transition-colors">
+          <button
+
+            class="inline-flex items-center px-4 py-2 bg-primary hover:bg-primary-dark text-white text-sm font-medium rounded-lg transition-colors"
+          >
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
             </svg>
@@ -60,7 +63,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm text-gray-500">Delivery Rate</p>
-              <p class="text-2xl font-bold text-primary">{{ (dashboardStats.deliveryRate || 0) | percent }}</p>
+              <p class="text-2xl font-bold text-primary">{{ dashboardStats.scheduledMessages || 0 }}</p>
             </div>
             <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -74,12 +77,16 @@
         <!-- Message Volume Chart -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h3 class="text-lg font-semibold text-gray-900 mb-4">Message Volume (Last 30 Days)</h3>
-          <canvas id="messageVolumeChart" class="w-full h-64"></canvas>
+          <div class="chart-container">
+            <canvas id="messageVolumeChart" class="w-full h-64"></canvas>
+          </div>
         </div>
         <!-- Delivery Success Rate Chart -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h3 class="text-lg font-semibold text-gray-900 mb-4">Delivery Success Rate</h3>
-          <canvas id="deliveryRateChart" class="w-full h-64"></canvas>
+          <div class="chart-container">
+            <canvas id="deliveryRateChart" class="w-full h-64"></canvas>
+          </div>
         </div>
       </div>
 
